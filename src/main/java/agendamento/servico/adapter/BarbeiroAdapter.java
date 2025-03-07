@@ -1,12 +1,10 @@
 package agendamento.servico.adapter;
 
-import agendamento.servico.dto.AtualizarBarbeiro;
 import agendamento.servico.dto.CadastroBarbeiro;
 import agendamento.servico.dto.RegistroBarbeiro;
 import agendamento.servico.entity.Barbeiro;
 
 import java.time.Instant;
-import java.util.Optional;
 
 public class BarbeiroAdapter {
     public static Barbeiro fromCadastroBarbeiroToEntity(CadastroBarbeiro dados){
