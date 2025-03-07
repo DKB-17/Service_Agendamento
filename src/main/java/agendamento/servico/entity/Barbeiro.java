@@ -1,4 +1,4 @@
-package agendamento.servico.barbeiro.service.model;
+package agendamento.servico.entity;
 
 
 import jakarta.persistence.*;
@@ -21,10 +21,10 @@ public class Barbeiro {
     private String nome;
     @Column(name = "link_imagem")
     private String caminhoImagem;
-    @Column(name = "delete_at")
+    @Column(name = "deleted_at")
     private Instant deleteAt;
-    @Column(name = "update_at")
+    @Column(name = "updated_at")
     private Instant updateAt;
-    @Column(name = "create_at")
+    @Column(name = "created_at")
     private Instant createAt;
 }
