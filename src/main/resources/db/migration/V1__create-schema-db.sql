@@ -2,8 +2,8 @@ CREATE TABLE "horarios" (
                             "id" SERIAL PRIMARY KEY,
                             "inicio" time,
                             "fim" time,
-                            "delete_at" timestamp,
-                            "update_at" timestamp,
+                            "deleted_at" timestamp,
+                            "updated_at" timestamp,
                             "created_at" timestamp
 );
 
@@ -11,8 +11,8 @@ CREATE TABLE "barbeiros" (
                              "id" SERIAL PRIMARY KEY,
                              "nome" varchar(100),
                              "link_imagem" varchar(255),
-                             "delete_at" timestamp,
-                             "update_at" timestamp,
+                             "deleted_at" timestamp,
+                             "updated_at" timestamp,
                              "created_at" timestamp
 );
 
@@ -28,8 +28,8 @@ CREATE TABLE "servicos" (
                             "descricao" varchar(50),
                             "valor" numeric(7,2),
                             "duracao" time,
-                            "delete_at" timestamp,
-                            "update_at" timestamp,
+                            "deleted_at" timestamp,
+                            "updated_at" timestamp,
                             "created_at" timestamp
 );
 
@@ -45,8 +45,8 @@ CREATE TABLE "clientes" (
                             "nome" varchar(100),
                             "cpf" varchar(14),
                             "contato" varchar(14),
-                            "delete_at" timestamp,
-                            "update_at" timestamp,
+                            "deleted_at" timestamp,
+                            "updated_at" timestamp,
                             "created_at" timestamp
 );
 
@@ -54,8 +54,8 @@ CREATE TABLE "caixas" (
                           "id" SERIAL PRIMARY KEY,
                           "lucro" numeric(10,2),
                           "dia" date,
-                          "delete_at" timestamp,
-                          "update_at" timestamp,
+                          "deleted_at" timestamp,
+                          "updated_at" timestamp,
                           "created_at" timestamp
 );
 
@@ -76,8 +76,8 @@ CREATE TABLE "agendas" (
                            "dia" date,
                            "valor" numeric(7,2),
                            "etapa" etapa,
-                           "delete_at" timestamp,
-                           "update_at" timestamp,
+                           "deleted_at" timestamp,
+                           "updated_at" timestamp,
                            "created_at" timestamp
 );
 
