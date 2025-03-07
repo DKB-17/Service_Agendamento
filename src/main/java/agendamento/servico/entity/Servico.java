@@ -1,4 +1,4 @@
-package agendamento.servico.servico.service.model;
+package agendamento.servico.entity;
 
 
 import jakarta.persistence.*;
@@ -19,10 +19,10 @@ public class Servico {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descricao;
-    @Column(name = "delete_at")
+    @Column(name = "deleted_at")
     private Instant deleteAt;
-    @Column(name = "update_at")
+    @Column(name = "updated_at")
     private Instant updateAt;
-    @Column(name = "create_at")
+    @Column(name = "created_at")
     private Instant createAt;
 }
