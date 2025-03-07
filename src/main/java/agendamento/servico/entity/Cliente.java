@@ -1,4 +1,4 @@
-package agendamento.servico.cliente.service.model;
+package agendamento.servico.entity;
 
 
 import jakarta.persistence.*;
