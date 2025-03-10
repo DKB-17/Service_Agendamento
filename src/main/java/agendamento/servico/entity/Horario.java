@@ -20,9 +20,9 @@ public class Horario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "inicio")
-    private LocalTime HoraInicio;
+    private LocalTime horarioInicio;
     @Column(name = "fim")
-    private LocalTime HoraFim;
+    private LocalTime horarioFim;
     @Column(name = "deleted_at")
     private Instant deleteAt;
     @Column(name = "updated_at")
