@@ -18,23 +18,23 @@ import java.util.Optional;
 @AllArgsConstructor
 public class BarbeiroServiceImpl implements BarbeiroService {
 
-    private BarbeiroRepository barbeiroRespository;
+    private BarbeiroRepository barbeiroRepository;
 
     @Override
     public RegistroBarbeiro cadastrarBarbeiro(CadastroBarbeiro dados) {
         Barbeiro barbeiro = BarbeiroAdapter.fromCadastroBarbeiroToEntity(dados);
-        this.barbeiroRespository.save(barbeiro);
+        this.barbeiroRepository.save(barbeiro);
         return BarbeiroAdapter.fromEntityToRegistroBarbeiro(barbeiro);
     }
 
     @Override
     public List<RegistroBarbeiro> listarBarbeiros() {
-        return this.barbeiroRespository.findByDeleteAtIsNull().stream().map(BarbeiroAdapter::fromEntityToRegistroBarbeiro).toList();
+        return this.barbeiroRepository.findByDeleteAtIsNull().stream().map(BarbeiroAdapter::fromEntityToRegistroBarbeiro).toList();
     }
 
     @Override
     public RegistroBarbeiro buscarBarbeiro(Long id) {
-        Optional<Barbeiro> barbeiro = this.barbeiroRespository.findById(id);
+        Optional<Barbeiro> barbeiro = this.barbeiroRepository.findById(id);
         if (barbeiro.isEmpty() || barbeiro.get().getDeleteAt() != null) {
             throw new RuntimeException("Registro de barbeiro nao existe");
         }else{
@@ -44,7 +44,7 @@ public class BarbeiroServiceImpl implements BarbeiroService {
 
     @Override
     public RegistroBarbeiro atualizarBarbeiro(AtualizarBarbeiro dados) {
-        Optional<Barbeiro> barbeiro = this.barbeiroRespository.findById(dados.id());
+        Optional<Barbeiro> barbeiro = this.barbeiroRepository.findById(dados.id());
         if (barbeiro.isEmpty() || barbeiro.get().getDeleteAt() != null) {
             throw new RuntimeException("Registro de barbeiro nao existe");
         } else {
@@ -55,13 +55,13 @@ public class BarbeiroServiceImpl implements BarbeiroService {
                 barbeiro.get().setCaminhoImagem(dados.caminhoImagem());
             }
             barbeiro.get().setUpdateAt(Instant.now());
-            return BarbeiroAdapter.fromEntityToRegistroBarbeiro(this.barbeiroRespository.save(barbeiro.get()));
+            return BarbeiroAdapter.fromEntityToRegistroBarbeiro(this.barbeiroRepository.save(barbeiro.get()));
         }
     }
 
     @Override
     public void desativarBarbeiro(Long id) {
-        Optional<Barbeiro> barbeiro = this.barbeiroRespository.findById(id);
+        Optional<Barbeiro> barbeiro = this.barbeiroRepository.findById(id);
         if (barbeiro.isEmpty() || barbeiro.get().getDeleteAt() != null){
             throw new RuntimeException("Registro de barbeiro nao existe");
         } else {
@@ -71,12 +71,12 @@ public class BarbeiroServiceImpl implements BarbeiroService {
 
     @Override
     public RegistroBarbeiro ativarBarbeiro(Long id) {
-        Optional<Barbeiro> barbeiro = this.barbeiroRespository.findById(id);
+        Optional<Barbeiro> barbeiro = this.barbeiroRepository.findById(id);
         if (barbeiro.isEmpty()){
             throw new RuntimeException("Registro de barbeiro nao existe");
         } else {
             barbeiro.get().setDeleteAt(null);
-            return BarbeiroAdapter.fromEntityToRegistroBarbeiro(this.barbeiroRespository.save(barbeiro.get()));
+            return BarbeiroAdapter.fromEntityToRegistroBarbeiro(this.barbeiroRepository.save(barbeiro.get()));
         }
     }
 
