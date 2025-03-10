@@ -1,0 +1,10 @@
+package agendamento.servico.repository;
+
+import agendamento.servico.entity.Horario;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface HorarioRepository extends JpaRepository<Horario, Long> {
+    List<Horario> findByDeleteAtIsNull();
+}
