@@ -25,8 +25,12 @@ public class BarbeiroController {
     @PostMapping("/cadastrar")
     @Transactional
     public ResponseEntity<RegistroBarbeiro> cadastrarBarbeiro(@RequestBody @Valid CadastroBarbeiro dados){
-        RegistroBarbeiro regisBarbeiro = this.barbeiroService.cadastrarBarbeiro(dados);
-        return ResponseEntity.status(HttpStatus.CREATED).body(regisBarbeiro);
+        try {
+            RegistroBarbeiro regisBarbeiro = this.barbeiroService.cadastrarBarbeiro(dados);
+            return ResponseEntity.status(HttpStatus.CREATED).body(regisBarbeiro);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @GetMapping("/listar")
