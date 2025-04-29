@@ -29,4 +29,9 @@ public class Horario {
     private Instant updateAt;
     @Column(name = "created_at")
     private Instant createAt;
+
+    public void atualizaHorario(){
+
+    }
+
 }
