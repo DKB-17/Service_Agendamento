@@ -7,5 +7,4 @@ public record CadastroBarbeiro(
         String nome,
         @NotBlank
         String caminhoImagem
-) {
-}
+) { }

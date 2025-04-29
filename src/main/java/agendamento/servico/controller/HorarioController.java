@@ -6,7 +6,6 @@ import agendamento.servico.dto.RegistroHorario;
 import agendamento.servico.service.HorarioService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
