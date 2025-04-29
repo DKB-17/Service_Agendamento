@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +17,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/barbeiros")
-@AllArgsConstructor
 public class BarbeiroController {
 
-    @Autowired
     private final BarbeiroService barbeiroService;
+
+    @Autowired
+    public BarbeiroController(@Lazy BarbeiroService barbeiroService) {
+        this.barbeiroService = barbeiroService;
+    }
+
 
     @PostMapping("/cadastrar")
     @Transactional
