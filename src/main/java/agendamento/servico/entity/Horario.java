@@ -30,8 +30,17 @@ public class Horario {
     @Column(name = "created_at")
     private Instant createAt;
 
-    public void atualizaHorario(){
-
+    public void atualizaHorario(LocalTime horarioInicio, LocalTime horarioFim){
+        if(horarioInicio != null && horarioFim != null){
+            if(horarioInicio.isBefore(horarioFim)){
+                this.horarioInicio = horarioInicio;
+                this.horarioFim = horarioFim;
+            }else{
+                throw new RuntimeException("Horario invalido");
+            }
+        }else{
+            throw new RuntimeException("Atualização invalida");
+        }
     }
 
 }
