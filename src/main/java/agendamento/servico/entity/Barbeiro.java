@@ -19,7 +19,8 @@ public class Barbeiro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
-    @Column(name = "link_imagem")
+    @OneToOne(cascade = CascadeType.ALL)
+    private Imagem image;
     private String caminhoImagem;
     @Column(name = "deleted_at")
     private Instant deleteAt;
