@@ -1,6 +1,7 @@
 package agendamento.servico.service.impl;
 
 import agendamento.servico.adapter.ServicoAdapter;
+import agendamento.servico.dto.AtualizarServico;
 import agendamento.servico.dto.CadastroServico;
 import agendamento.servico.dto.RegistroServico;
 import agendamento.servico.entity.Servico;
@@ -54,15 +55,26 @@ public class ServicoServiceImpl implements ServicoService {
     }
 
     @Override
-    public RegistroServico atualizarServico(Long id, CadastroServico dados) {
+    public RegistroServico atualizarServico(Long id, AtualizarServico dados) {
         Optional<Servico> servico = servicoRepository.findById(id);
         if(servico.isEmpty() || servico.get().getDeleteAt() != null) {
             throw new RuntimeException("Registro de servico nao existe");
         }
+        if(dados.descricao() != null){
+            servico.get().setDescricao(dados.descricao());
+        }
+        if(dados.valor() != null){
+            servico.get().setValor(dados.valor());
+        }
+        if (dados.duracao() != null){
+            servico.get().setDuracao(dados.duracao());
+        }
+        servico.get().setUpdateAt(Instant.now());
+        return ServicoAdapter.fromEntityToRegistroServico(servico.get());
     }
 
     @Override
     public List<RegistroServico> listarServicos() {
-        return List.of();
+        return this.servicoRepository.findByDeleteAtIsNull().stream().map(ServicoAdapter::fromEntityToRegistroServico).toList();
     }
 }
