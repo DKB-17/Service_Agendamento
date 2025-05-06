@@ -48,8 +48,17 @@ public class HorarioServiceImpl implements HorarioService {
         if (horario.isEmpty() || horario.get().getDeleteAt() != null) {
             throw new RuntimeException("Registro de horario nao existe");
         } else {
-            horario.get().atualizaHorario(dados.horarioInicio(), dados.horarioFim());
-            horario.get().setUpdateAt(Instant.now());
+            if(dados.horarioInicio()!= null && dados.horarioFim() != null){
+                if(dados.horarioInicio().isBefore(dados.horarioFim())){
+                    horario.get().setHorarioInicio(dados.horarioInicio());
+                    horario.get().setHorarioFim(dados.horarioFim());
+                    horario.get().setUpdateAt(Instant.now());
+                }else{
+                    throw new RuntimeException("Horario invalido");
+                }
+            }else{
+                throw new RuntimeException("Atualização invalida");
+            }
             return HorarioAdapter.fromEntityToRegistroHorario(this.horarioRepository.save(horario.get()));
         }
     }
