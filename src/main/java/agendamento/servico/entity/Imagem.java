@@ -1,6 +1,7 @@
 package agendamento.servico.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Table(name = "imagens")
@@ -14,6 +15,7 @@ public class Imagem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
     @Column(name = "caminho_link")
     private String caminho;
 
