@@ -1,5 +1,6 @@
 package agendamento.servico.service;
 
+import agendamento.servico.dto.AtualizarServico;
 import agendamento.servico.dto.CadastroServico;
 import agendamento.servico.dto.RegistroServico;
 
@@ -11,7 +12,7 @@ public interface ServicoService {
     public RegistroServico buscarServico(Long id);
     public void desativarServico(Long id);
     public RegistroServico ativarServico(Long id);
-    public RegistroServico atualizarServico(Long id, CadastroServico dados);
+    public RegistroServico atualizarServico(Long id, AtualizarServico dados);
     public List<RegistroServico> listarServicos();
 
 }
