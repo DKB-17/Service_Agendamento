@@ -13,19 +13,16 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Barbeiro {
+public class Barbeiro extends EntidadeComImagem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Imagem image;
-    private String caminhoImagem;
     @Column(name = "deleted_at")
-    private Instant deleteAt;
+    private Instant deletedAt;
     @Column(name = "updated_at")
-    private Instant updateAt;
+    private Instant updatedAt;
     @Column(name = "created_at")
-    private Instant createAt;
+    private Instant createdAt;
 }
