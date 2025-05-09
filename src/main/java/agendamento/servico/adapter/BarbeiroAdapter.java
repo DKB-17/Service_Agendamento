@@ -9,17 +9,17 @@ import java.time.Instant;
 
 public class BarbeiroAdapter {
     public static Barbeiro fromCadastroBarbeiroToEntity(CadastroBarbeiro dados){
-
-        Imagem imagem = new Imagem();
-
         Barbeiro barbeiro = new Barbeiro(
             null,
             dados.nome(),
             null,
             Instant.now(),
             Instant.now()
-                                        );
-
+        );
+        barbeiro.setImagem(new Imagem(
+                null,
+                dados.caminhoImagem()
+        ));
         return barbeiro;
     }
 
@@ -27,8 +27,8 @@ public class BarbeiroAdapter {
         return new RegistroBarbeiro(
                 barbeiro.getId(),
                 barbeiro.getNome(),
-                barbeiro.getCaminhoImagem(),
-                barbeiro.getCreateAt()
+                barbeiro.getImagem().getCaminho(),
+                barbeiro.getCreatedAt()
         );
     }
 }
