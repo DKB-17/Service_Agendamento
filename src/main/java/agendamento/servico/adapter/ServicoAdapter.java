@@ -11,6 +11,8 @@ public class ServicoAdapter {
         return new Servico(
             null,
             cadastroServico.descricao(),
+            cadastroServico.valor(),
+            cadastroServico.duracao(),
             null,
             Instant.now(),
             Instant.now()
