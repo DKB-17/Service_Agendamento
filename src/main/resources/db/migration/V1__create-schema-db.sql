@@ -1,143 +1,142 @@
-CREATE TABLE "horarios" (
-                            "id" SERIAL PRIMARY KEY,
-                            "inicio" time,
-                            "fim" time,
-                            "deleted_at" timestamp,
-                            "updated_at" timestamp,
-                            "created_at" timestamp
+CREATE TABLE horarios (
+                            id SERIAL PRIMARY KEY,
+                            inicio time,
+                            fim time,
+                            deleted_at timestamp,
+                            updated_at timestamp,
+                            created_at timestamp
 );
 
-CREATE TABLE "imagens" (
-                            "id" SERIAL PRIMARY KEY ,
-                            "caminho_link" varchar(225),
-)
-
-CREATE TABLE "barbeiros" (
-                             "id" SERIAL PRIMARY KEY,
-                             "nome" varchar(100),
-                             "imagem_id" integer,
-                             FOREIGN KEY (imagem_id) REFERENCES imagem(id),
-                             "deleted_at" timestamp,
-                             "updated_at" timestamp,
-                             "created_at" timestamp
+CREATE TABLE imagens (
+                            id SERIAL PRIMARY KEY ,
+                            caminho_link varchar(225)
 );
 
-CREATE TABLE "horario_barbeiro" (
-                                    "horario_id" integer,
+CREATE TABLE barbeiros (
+                             id SERIAL PRIMARY KEY,
+                             nome varchar(100),
+                             imagem_id integer,
+                             FOREIGN KEY (imagem_id) REFERENCES imagens(id),
+                             deleted_at timestamp,
+                             updated_at timestamp,
+                             created_at timestamp
+);
+
+CREATE TABLE horario_barbeiro (
+                                    horario_id integer,
                                     FOREIGN KEY (horario_id) REFERENCES horarios(id),
-                                    "barbeiro_id" integer,
+                                    barbeiro_id integer,
                                     FOREIGN KEY (barbeiro_id) REFERENCES barbeiros(id)
 );
 
-CREATE TABLE "servicos" (
-                            "id" SERIAL PRIMARY KEY,
-                            "descricao" varchar(50),
-                            "valor" numeric(7,2),
-                            "duracao" time,
-                            "deleted_at" timestamp,
-                            "updated_at" timestamp,
-                            "created_at" timestamp
+CREATE TABLE servicos (
+                            id SERIAL PRIMARY KEY,
+                            descricao varchar(50),
+                            valor numeric(7,2),
+                            duracao time,
+                            deleted_at timestamp,
+                            updated_at timestamp,
+                            created_at timestamp
 );
 
-CREATE TABLE "servico_barbeiro" (
-                                    "barbeiro_id" integer,
+CREATE TABLE servico_barbeiro (
+                                    barbeiro_id integer,
                                     FOREIGN KEY (barbeiro_id) REFERENCES barbeiros(id),
-                                    "servico_id" integer,
+                                    servico_id integer,
                                     FOREIGN KEY (servico_id) REFERENCES servicos(id)
 );
 
-CREATE TABLE "usuarios" (
-    "id" SERIAL PRIMARY KEY ,
-    "nome" varchar(100),
-    "contato" varchar(14),
-    "deleted_at" timestamp,
-    "updated_at" timestamp,
-    "created_at" timestamp
-)
-
-CREATE TABLE "clientes" (
-                            "id" SERIAL PRIMARY KEY,
-                            "imagem_id" integer,
-                            FOREIGN KEY (imagem_id) REFERENCES imagens(id),
-                            "usuario_id" integer,
-                            FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
-                            "cpf" varchar(14),
-                            "email" varchar(200),
-                            "password" varchar(32),
-                            "deleted_at" timestamp,
-                            "updated_at" timestamp,
-                            "created_at" timestamp
+CREATE TABLE usuarios (
+    id SERIAL PRIMARY KEY ,
+    nome varchar(100),
+    contato varchar(14),
+    deleted_at timestamp,
+    updated_at timestamp,
+    created_at timestamp
 );
 
-CREATE TABLE "caixas" (
-                          "id" SERIAL PRIMARY KEY,
-                          "lucro" numeric(10,2),
-                          "dia" date,
-                          "deleted_at" timestamp,
-                          "updated_at" timestamp,
-                          "created_at" timestamp
+CREATE TABLE clientes (
+                            id SERIAL PRIMARY KEY,
+                            imagem_id integer,
+                            FOREIGN KEY (imagem_id) REFERENCES imagens(id),
+                            usuario_id integer,
+                            FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+                            cpf varchar(14),
+                            email varchar(200),
+                            password varchar(32),
+                            deleted_at timestamp,
+                            updated_at timestamp,
+                            created_at timestamp
+);
+
+CREATE TABLE caixas (
+                          id SERIAL PRIMARY KEY,
+                          lucro numeric(10,2),
+                          dia date,
+                          deleted_at timestamp,
+                          updated_at timestamp,
+                          created_at timestamp
 );
 
 CREATE TYPE etapa AS ENUM ('pendente', 'concluido', 'cancelado', 'remarcado');
 
-CREATE TABLE "agendas" (
-                           "id" SERIAL PRIMARY KEY,
-                           "cliente_id" integer,
+CREATE TABLE agendas (
+                           id SERIAL PRIMARY KEY,
+                           cliente_id integer,
                             FOREIGN KEY (cliente_id) REFERENCES clientes(id),
-                           "horario_id" integer,
+                           horario_id integer,
                             FOREIGN KEY (horario_id) REFERENCES horarios(id),
-                           "barbeiro_id" integer,
+                           barbeiro_id integer,
                             FOREIGN KEY (barbeiro_id) REFERENCES barbeiros(id),
-                           "servico_id" integer,
+                           servico_id integer,
                             FOREIGN KEY (servico_id) REFERENCES servicos(id),
-                           "caixa_id" integer,
-                            FOREIGN KEY (caixa_id) REFERENCES "caixas"(id),
-                           "dia" date,
-                           "valor" numeric(7,2),
-                           "etapa" etapa,
-                           "deleted_at" timestamp,
-                           "updated_at" timestamp,
-                           "created_at" timestamp
+                           caixa_id integer,
+                            FOREIGN KEY (caixa_id) REFERENCES caixas(id),
+                           dia date,
+                           valor numeric(7,2),
+                           etapa etapa,
+                           deleted_at timestamp,
+                           updated_at timestamp,
+                           created_at timestamp
 );
- CREATE TABLE "posts" (
-     "id" SERIAL PRIMARY KEY ,
-     "cliente_id" integer,
+ CREATE TABLE posts (
+     id SERIAL PRIMARY KEY ,
+     cliente_id integer,
      FOREIGN KEY (cliente_id) REFERENCES clientes(id),
-     "imagem_id" integer,
+     imagem_id integer,
      FOREIGN KEY (imagem_id) REFERENCES imagens(id),
-     "legenda" varchar(250),
-     "avaliacao" integer,
-     "qtd_curtidas" integer,
-     "deleted_at" timestamp,
-     "updated_at" timestamp,
-     "created_at" timestamp
- )
+     legenda varchar(250),
+     avaliacao integer,
+     qtd_curtidas integer,
+     deleted_at timestamp,
+     updated_at timestamp,
+     created_at timestamp
+ );
 
- CREATE TABLE "comentarios" (
-     "id" SERIAL PRIMARY KEY,
-     "texto" varchar(250),
-     "qtd_curtidas" integer,
-     "cliente_id" integer,
+ CREATE TABLE comentarios (
+     id SERIAL PRIMARY KEY,
+     texto varchar(250),
+     qtd_curtidas integer,
+     cliente_id integer,
      FOREIGN KEY (cliente_id) REFERENCES clientes(id),
-     "post_id" integer,
+     post_id integer,
      FOREIGN KEY (post_id) REFERENCES posts(id),
-     "comentarios_id" integer,
+     comentarios_id integer,
      FOREIGN KEY (comentarios_id) REFERENCES comentarios(id),
-     "deleted_at" timestamp,
-     "updated_at" timestamp,
-     "created_at" timestamp
- )
+     deleted_at timestamp,
+     updated_at timestamp,
+     created_at timestamp
+ );
 
- CREATE TABLE "curtidas"
- (
-     "cliente_id"    integer,
-     "post_id"       integer,
-     "comentario_id" integer,
+ CREATE TABLE curtidas (
+     cliente_id    integer,
+     post_id       integer,
+     comentario_id integer,
      CONSTRAINT pk PRIMARY KEY (cliente_id, post_id, comentario_id),
-     "created_at"    timestamp
- )
+     created_at    timestamp
+ );
 
- CREATE TABLE "folgas" (
-     "id" SERIAL PRIMARY KEY ,
-     "dia" date
- )
+ CREATE TABLE folgas (
+     id SERIAL PRIMARY KEY ,
+     dia date
+ );
