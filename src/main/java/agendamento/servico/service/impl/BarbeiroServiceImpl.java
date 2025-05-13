@@ -29,7 +29,7 @@ public class BarbeiroServiceImpl implements BarbeiroService {
 
     @Override
     public List<RegistroBarbeiro> listarBarbeiros() {
-        return this.barbeiroRepository.findByDeleteAtIsNull().stream().map(BarbeiroAdapter::fromEntityToRegistroBarbeiro).toList();
+        return this.barbeiroRepository.findByDeletedAtIsNull().stream().map(BarbeiroAdapter::fromEntityToRegistroBarbeiro).toList();
     }
 
     @Override
