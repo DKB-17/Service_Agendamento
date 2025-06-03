@@ -7,11 +7,15 @@ import agendamento.servico.dto.RegistroServico;
 import agendamento.servico.entity.Servico;
 import agendamento.servico.repository.ServicoRepository;
 import agendamento.servico.service.ServicoService;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+@Service
+@AllArgsConstructor
 public class ServicoServiceImpl implements ServicoService {
 
     private ServicoRepository servicoRepository;
@@ -19,14 +23,14 @@ public class ServicoServiceImpl implements ServicoService {
     @Override
     public RegistroServico cadastrarServico(CadastroServico dados) {
         Servico servico = ServicoAdapter.fromCadastroServicoToEntity(dados);
-        servicoRepository.save(servico);
+        this.servicoRepository.save(servico);
         return ServicoAdapter.fromEntityToRegistroServico(servico);
     }
 
     @Override
     public RegistroServico buscarServico(Long id) {
-        Optional<Servico> servico = servicoRepository.findById(id);
-        if(servico.isEmpty() || servico.get().getDeleteAt() != null) {
+        Optional<Servico> servico = this.servicoRepository.findById(id);
+        if(servico.isEmpty() || servico.get().getDeletedAt() != null) {
             throw new RuntimeException();
         }else{
             return ServicoAdapter.fromEntityToRegistroServico(servico.get());
@@ -35,29 +39,29 @@ public class ServicoServiceImpl implements ServicoService {
 
     @Override
     public void desativarServico(Long id) {
-        Optional<Servico> servico = servicoRepository.findById(id);
-        if(servico.isEmpty() || servico.get().getDeleteAt() != null) {
+        Optional<Servico> servico = this.servicoRepository.findById(id);
+        if(servico.isEmpty() || servico.get().getDeletedAt() != null) {
             throw new RuntimeException("Registro de servico nao existe");
         } else {
-            servico.get().setDeleteAt(Instant.now());
+            servico.get().setDeletedAt(Instant.now());
         }
     }
 
     @Override
     public RegistroServico ativarServico(Long id) {
-        Optional<Servico> servico = servicoRepository.findById(id);
+        Optional<Servico> servico = this.servicoRepository.findById(id);
         if(servico.isEmpty()) {
             throw new RuntimeException("Registro de servico nao existe");
         } else {
-            servico.get().setDeleteAt(null);
+            servico.get().setDeletedAt(null);
             return ServicoAdapter.fromEntityToRegistroServico(servico.get());
         }
     }
 
     @Override
-    public RegistroServico atualizarServico(Long id, AtualizarServico dados) {
-        Optional<Servico> servico = servicoRepository.findById(id);
-        if(servico.isEmpty() || servico.get().getDeleteAt() != null) {
+    public RegistroServico atualizarServico(AtualizarServico dados) {
+        Optional<Servico> servico = this.servicoRepository.findById(dados.id());
+        if(servico.isEmpty() || servico.get().getDeletedAt() != null) {
             throw new RuntimeException("Registro de servico nao existe");
         }
         if(dados.descricao() != null){
@@ -66,15 +70,12 @@ public class ServicoServiceImpl implements ServicoService {
         if(dados.valor() != null){
             servico.get().setValor(dados.valor());
         }
-        if (dados.duracao() != null){
-            servico.get().setDuracao(dados.duracao());
-        }
-        servico.get().setUpdateAt(Instant.now());
-        return ServicoAdapter.fromEntityToRegistroServico(servico.get());
+        servico.get().setUpdatedAt(Instant.now());
+        return ServicoAdapter.fromEntityToRegistroServico(this.servicoRepository.save(servico.get()));
     }
 
     @Override
     public List<RegistroServico> listarServicos() {
-        return this.servicoRepository.findByDeleteAtIsNull().stream().map(ServicoAdapter::fromEntityToRegistroServico).toList();
+        return this.servicoRepository.findByDeletedAtIsNull().stream().map(ServicoAdapter::fromEntityToRegistroServico).toList();
     }
 }

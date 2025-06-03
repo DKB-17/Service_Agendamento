@@ -1,12 +1,16 @@
 package agendamento.servico.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Table(name = "servicos")
 @Entity(name = "Servico")
@@ -15,6 +19,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@ToString
 public class Servico {
 
     @Id
@@ -22,11 +27,15 @@ public class Servico {
     private Long id;
     private String descricao;
     private BigDecimal valor;
-    private Duration duracao;
+
+    @OneToMany(mappedBy = "servico")
+    private List<ServicoBarbeiro> servicoBarbeiro;
+
     @Column(name = "deleted_at")
-    private Instant deleteAt;
+    private Instant deletedAt;
     @Column(name = "updated_at")
-    private Instant updateAt;
+    private Instant updatedAt;
     @Column(name = "created_at")
-    private Instant createAt;
+    private Instant createdAt;
+
 }

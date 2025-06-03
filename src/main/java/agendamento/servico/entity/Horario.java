@@ -1,11 +1,14 @@
 package agendamento.servico.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Set;
 
 @Table(name = "horarios")
 @Entity(name = "Horario")
@@ -14,6 +17,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@ToString
 public class Horario {
 
     @Id
@@ -23,11 +27,14 @@ public class Horario {
     private LocalTime horarioInicio;
     @Column(name = "fim")
     private LocalTime horarioFim;
-    @Column(name = "deleted_at")
-    private Instant deleteAt;
-    @Column(name = "updated_at")
-    private Instant updateAt;
-    @Column(name = "created_at")
-    private Instant createAt;
 
+    @OneToMany(mappedBy = "horario")
+    private List<HorarioBarbeiro> horarioBarbeiro;
+
+    @Column(name = "deleted_at")
+    private Instant deletedAt;
+    @Column(name = "updated_at")
+    private Instant updatedAt;
+    @Column(name = "created_at")
+    private Instant createdAt;
 }

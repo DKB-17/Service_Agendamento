@@ -5,6 +5,7 @@ import agendamento.servico.dto.RegistroHorario;
 import agendamento.servico.entity.Horario;
 
 import java.time.Instant;
+import java.util.Collections;
 
 public class HorarioAdapter {
     public static Horario fromCadastroHorarioToEntity(CadastroHorario dados){
@@ -12,6 +13,7 @@ public class HorarioAdapter {
                 null,
                 dados.horarioInicio(),
                 dados.horarioFim(),
+                Collections.emptyList(),
                 null,
                 Instant.now(),
                 Instant.now()
@@ -22,7 +24,8 @@ public class HorarioAdapter {
                 dados.getId(),
                 dados.getHorarioInicio(),
                 dados.getHorarioFim(),
-                dados.getCreateAt()
+                dados.getCreatedAt(),
+                dados.getUpdatedAt()
         );
     }
 }

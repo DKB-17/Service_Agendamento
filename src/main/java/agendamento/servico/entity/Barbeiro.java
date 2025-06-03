@@ -1,10 +1,12 @@
 package agendamento.servico.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.List;
 
 @Table(name = "barbeiros")
 @Entity(name = "Barbeiro")
@@ -13,16 +15,30 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Barbeiro extends EntidadeComImagem {
+@ToString
+public class Barbeiro {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "imagem_id")
+    private Imagem imagem;
+
+    @OneToMany(mappedBy = "barbeiro")
+    private List<ServicoBarbeiro> servicoBarbeiro;
+
+    @OneToMany(mappedBy = "barbeiro")
+    private List<HorarioBarbeiro> horarioBarbeiro;
+
     @Column(name = "deleted_at")
     private Instant deletedAt;
+
     @Column(name = "updated_at")
     private Instant updatedAt;
+
     @Column(name = "created_at")
     private Instant createdAt;
 }

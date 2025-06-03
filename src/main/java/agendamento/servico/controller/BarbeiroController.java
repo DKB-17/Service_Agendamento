@@ -17,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/barbeiros")
+@CrossOrigin
 public class BarbeiroController {
 
     private final BarbeiroService barbeiroService;
@@ -38,7 +39,7 @@ public class BarbeiroController {
         }
     }
 
-    @GetMapping("/listar")
+    @GetMapping()
     public ResponseEntity<List<RegistroBarbeiro>> listarBarbeiros(){
         List<RegistroBarbeiro> lista =  this.barbeiroService.listarBarbeiros();
         return ResponseEntity.ok(lista);

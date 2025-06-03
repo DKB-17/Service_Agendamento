@@ -29,13 +29,13 @@ public class HorarioServiceImpl implements HorarioService {
 
     @Override
     public List<RegistroHorario> listarHorarios() {
-        return this.horarioRepository.findByDeleteAtIsNull().stream().map(HorarioAdapter::fromEntityToRegistroHorario).toList();
+        return this.horarioRepository.findByDeletedAtIsNull().stream().map(HorarioAdapter::fromEntityToRegistroHorario).toList();
     }
 
     @Override
     public RegistroHorario buscarHorario(Long id) {
         Optional<Horario> horario = this.horarioRepository.findById(id);
-        if(horario.isEmpty() || horario.get().getDeleteAt() != null){
+        if(horario.isEmpty() || horario.get().getDeletedAt() != null){
             throw new RuntimeException();
         }else{
             return HorarioAdapter.fromEntityToRegistroHorario(horario.get());
@@ -45,14 +45,14 @@ public class HorarioServiceImpl implements HorarioService {
     @Override
     public RegistroHorario atualizarHorario(AtualizarHorario dados) {
         Optional<Horario> horario = this.horarioRepository.findById(dados.id());
-        if (horario.isEmpty() || horario.get().getDeleteAt() != null) {
+        if (horario.isEmpty() || horario.get().getDeletedAt() != null) {
             throw new RuntimeException("Registro de horario nao existe");
         } else {
             if(dados.horarioInicio()!= null && dados.horarioFim() != null){
                 if(dados.horarioInicio().isBefore(dados.horarioFim())){
                     horario.get().setHorarioInicio(dados.horarioInicio());
                     horario.get().setHorarioFim(dados.horarioFim());
-                    horario.get().setUpdateAt(Instant.now());
+                    horario.get().setUpdatedAt(Instant.now());
                 }else{
                     throw new RuntimeException("Horario invalido");
                 }
@@ -66,10 +66,10 @@ public class HorarioServiceImpl implements HorarioService {
     @Override
     public void desativarHorario(Long id) {
         Optional<Horario> horario = this.horarioRepository.findById(id);
-        if (horario.isEmpty() || horario.get().getDeleteAt() != null){
+        if (horario.isEmpty() || horario.get().getDeletedAt() != null){
             throw new RuntimeException("Registro de horario nao existe");
         } else {
-            horario.get().setDeleteAt(Instant.now());
+            horario.get().setDeletedAt(Instant.now());
         }
     }
 
@@ -79,7 +79,7 @@ public class HorarioServiceImpl implements HorarioService {
         if (horario.isEmpty()){
             throw new RuntimeException("Registro de horario nao existe");
         } else {
-            horario.get().setDeleteAt(null);
+            horario.get().setDeletedAt(null);
             return HorarioAdapter.fromEntityToRegistroHorario(horario.get());
         }
     }

@@ -1,32 +1,30 @@
 package agendamento.servico.entity;
 
-
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Date;
 
-@Table(name = "caixas")
-@Entity(name = "Caixa")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "usuarios")
+@Entity(name = "usuario")
 @EqualsAndHashCode(of = "id")
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
-public class Caixa {
+@Getter
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private BigDecimal lucro;
-    private Date dia;
+    private String nome;
+    private String contato;
     @Column(name = "deleted_at")
-    private Instant deleteAt;
+    private Instant deletedAt;
     @Column(name = "updated_at")
-    private Instant updateAt;
+    private Instant updatedAt;
     @Column(name = "created_at")
-    private Instant createAt;
+    private Instant createdAt;
+
 }

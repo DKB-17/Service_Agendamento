@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface BarbeiroService {
 
-    public RegistroBarbeiro cadastrarBarbeiro(CadastroBarbeiro dados);
-    public List<RegistroBarbeiro> listarBarbeiros();
-    public RegistroBarbeiro buscarBarbeiro(Long id);
-    public RegistroBarbeiro atualizarBarbeiro(AtualizarBarbeiro dados);
-    public void desativarBarbeiro(Long id);
-    public RegistroBarbeiro ativarBarbeiro(Long id);
+   RegistroBarbeiro cadastrarBarbeiro(CadastroBarbeiro dados);
+   List<RegistroBarbeiro> listarBarbeiros();
+   RegistroBarbeiro buscarBarbeiro(Long id);
+   RegistroBarbeiro atualizarBarbeiro(AtualizarBarbeiro dados);
+   void desativarBarbeiro(Long id);
+   RegistroBarbeiro ativarBarbeiro(Long id);
 }

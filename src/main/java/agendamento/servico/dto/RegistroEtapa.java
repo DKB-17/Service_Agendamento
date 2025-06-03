@@ -1,12 +1,11 @@
 package agendamento.servico.dto;
 
 import java.time.Instant;
-import java.time.LocalTime;
 
-public record RegistroHorario(
+public record RegistroEtapa(
         Long id,
-        LocalTime horarioInicio,
-        LocalTime horarioFim,
+        String sigla,
+        String descricao,
         Instant createdAt,
         Instant updatedAt
 ) {

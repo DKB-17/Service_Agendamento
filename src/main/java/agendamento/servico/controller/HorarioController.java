@@ -2,8 +2,10 @@ package agendamento.servico.controller;
 
 import agendamento.servico.dto.AtualizarHorario;
 import agendamento.servico.dto.CadastroHorario;
+import agendamento.servico.dto.RegistroDiasSemana;
 import agendamento.servico.dto.RegistroHorario;
 import agendamento.servico.service.HorarioService;
+import agendamento.servico.service.SemanaService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +18,25 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/horarios")
+@CrossOrigin
 public class HorarioController {
 
     private final HorarioService horarioService;
+    private final SemanaService semanaService;
 
     @Autowired
-    public HorarioController(@Lazy HorarioService horarioService) {
+    public HorarioController(@Lazy HorarioService horarioService, @Lazy SemanaService semanaService) {
         this.horarioService = horarioService;
+        this.semanaService = semanaService;
     }
 
-    @PostMapping("/cadastrar")
+    @GetMapping("/dias_da_semana")
+    public ResponseEntity<List<RegistroDiasSemana>> listarDiasDaSemana(){
+        List<RegistroDiasSemana> listaDeDiasDaSemana = this.semanaService.listarDiasSemanas();
+        return ResponseEntity.ok(listaDeDiasDaSemana);
+    }
+
+    @PostMapping()
     @Transactional
     public ResponseEntity<RegistroHorario> cadastrarHorario(@RequestBody @Valid CadastroHorario dados){
         try{
@@ -40,7 +51,7 @@ public class HorarioController {
         }
     }
 
-    @GetMapping("/listar")
+    @GetMapping()
     public ResponseEntity<List<RegistroHorario>> listarHorarios(){
         List<RegistroHorario> listaHorarios = this.horarioService.listarHorarios();
         return ResponseEntity.ok(listaHorarios);
@@ -56,7 +67,7 @@ public class HorarioController {
         }
     }
 
-    @PutMapping("/editar")
+    @PutMapping()
     @Transactional
     public ResponseEntity<RegistroHorario> atualizarHorario(@RequestBody @Valid AtualizarHorario dados){
         try{

@@ -14,14 +14,15 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@ToString
 public class Agenda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
-    private Cliente cliente;
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
     @ManyToOne
     @JoinColumn(name = "barbeiro_id")
     private Barbeiro barbeiro;
@@ -36,7 +37,11 @@ public class Agenda {
     private Caixa caixa;
     private Date dia;
     private BigDecimal valor;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "etapa", columnDefinition = "Etapa")
     private Etapa etapa;
+
     @Column(name = "deleted_at")
     private Instant deletedAt;
     @Column(name = "updated_at")

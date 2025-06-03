@@ -4,7 +4,8 @@ import agendamento.servico.entity.Horario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Set;
 
 public interface HorarioRepository extends JpaRepository<Horario, Long> {
-    List<Horario> findByDeleteAtIsNull();
+    List<Horario> findByDeletedAtIsNull();
 }
