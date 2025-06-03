@@ -1,7 +1,5 @@
 package agendamento.servico.entity;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +19,8 @@ public class Barbeiro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "nome")
     private String nome;
 
     @OneToOne(cascade = CascadeType.ALL)

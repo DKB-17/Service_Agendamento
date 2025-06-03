@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -18,6 +17,10 @@ public class SemanaServiceImpl implements SemanaService {
 
     @Override
     public List<RegistroDiasSemana> listarDiasSemanas() {
-        return this.diasDaSemanaRepository.findAll().stream().map(SemanaAdapter::fromEntityToRegistroDiasSemana).toList();
+        return this.diasDaSemanaRepository
+                .findAll()
+                .stream()
+                .map(SemanaAdapter::fromEntityToRegistroDiasSemana)
+                .toList();
     }
 }

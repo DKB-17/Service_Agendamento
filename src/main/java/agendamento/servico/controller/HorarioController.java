@@ -40,14 +40,14 @@ public class HorarioController {
     @Transactional
     public ResponseEntity<RegistroHorario> cadastrarHorario(@RequestBody @Valid CadastroHorario dados){
         try{
-            if(dados.horarioInicio().isBefore(dados.horarioFim())){
+            if(dados.horaInicio().isBefore(dados.horaFim())){
                 RegistroHorario regisHorario = this.horarioService.cadastrarHorario(dados);
                 return ResponseEntity.status(HttpStatus.CREATED).body(regisHorario);
             }else {
                 throw new RuntimeException("Horario invalidos");
             }
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -63,7 +63,7 @@ public class HorarioController {
             RegistroHorario regisHorario = this.horarioService.buscarHorario(id);
             return ResponseEntity.ok(regisHorario);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -74,7 +74,7 @@ public class HorarioController {
             RegistroHorario horario = this.horarioService.atualizarHorario(dados);
             return ResponseEntity.ok(horario);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -85,7 +85,7 @@ public class HorarioController {
             this.horarioService.desativarHorario(id);
             return ResponseEntity.status(HttpStatus.OK).build();
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -96,7 +96,7 @@ public class HorarioController {
             RegistroHorario horario = this.horarioService.ativarHorario(id);
             return ResponseEntity.ok(horario);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new RuntimeException(e.getMessage());
         }
     }
 

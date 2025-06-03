@@ -11,8 +11,8 @@ public class HorarioAdapter {
     public static Horario fromCadastroHorarioToEntity(CadastroHorario dados){
         return new Horario(
                 null,
-                dados.horarioInicio(),
-                dados.horarioFim(),
+                dados.horaInicio(),
+                dados.horaFim(),
                 Collections.emptyList(),
                 null,
                 Instant.now(),

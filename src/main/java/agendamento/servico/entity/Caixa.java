@@ -21,12 +21,19 @@ public class Caixa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "lucro")
     private BigDecimal lucro;
+
+    @Column(name = "dia")
     private Date dia;
+
     @Column(name = "deleted_at")
     private Instant deleteAt;
+
     @Column(name = "updated_at")
     private Instant updateAt;
+
     @Column(name = "created_at")
     private Instant createAt;
 }

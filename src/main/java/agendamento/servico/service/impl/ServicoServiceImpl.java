@@ -60,18 +60,14 @@ public class ServicoServiceImpl implements ServicoService {
 
     @Override
     public RegistroServico atualizarServico(AtualizarServico dados) {
-        Optional<Servico> servico = this.servicoRepository.findById(dados.id());
-        if(servico.isEmpty() || servico.get().getDeletedAt() != null) {
-            throw new RuntimeException("Registro de servico nao existe");
-        }
-        if(dados.descricao() != null){
-            servico.get().setDescricao(dados.descricao());
-        }
-        if(dados.valor() != null){
-            servico.get().setValor(dados.valor());
-        }
-        servico.get().setUpdatedAt(Instant.now());
-        return ServicoAdapter.fromEntityToRegistroServico(this.servicoRepository.save(servico.get()));
+        Servico servico = this.servicoRepository.findById(dados.id())
+                .orElseThrow(() -> new RuntimeException(""));
+
+        servico.setDescricao(dados.descricao());
+        servico.setValor(dados.valor());
+
+        servico.setUpdatedAt(Instant.now());
+        return ServicoAdapter.fromEntityToRegistroServico(this.servicoRepository.save(servico));
     }
 
     @Override

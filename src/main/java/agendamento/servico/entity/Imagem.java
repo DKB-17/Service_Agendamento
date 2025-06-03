@@ -15,8 +15,9 @@ public class Imagem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotBlank
-    @Column(name = "caminho_link")
-    private String caminho;
+    @Column(name = "base64_imagem")
+    private String base64Imagem;
 
 }

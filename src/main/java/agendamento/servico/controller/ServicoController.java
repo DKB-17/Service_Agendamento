@@ -34,8 +34,7 @@ public class ServicoController {
             RegistroServico registroServico = this.servicoService.cadastrarServico(dados);
             return ResponseEntity.status(HttpStatus.CREATED).body(registroServico);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -51,7 +50,7 @@ public class ServicoController {
             RegistroServico servico = this.servicoService.buscarServico(id);
             return ResponseEntity.ok(servico);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -61,7 +60,7 @@ public class ServicoController {
             RegistroServico servico = this.servicoService.atualizarServico(dados);
             return ResponseEntity.ok(servico);
         }catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -71,7 +70,7 @@ public class ServicoController {
             this.servicoService.desativarServico(id);
             return ResponseEntity.status(HttpStatus.OK).build();
         }catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -81,7 +80,7 @@ public class ServicoController {
             RegistroServico servico = this.servicoService.ativarServico(id);
             return ResponseEntity.ok(servico);
         }catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            throw new RuntimeException(e.getMessage());
         }
     }
 

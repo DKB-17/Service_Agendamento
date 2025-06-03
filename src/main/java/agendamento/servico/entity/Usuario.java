@@ -18,13 +18,19 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "nome")
     private String nome;
+
+    @Column(name = "contato")
     private String contato;
+
     @Column(name = "deleted_at")
     private Instant deletedAt;
+
     @Column(name = "updated_at")
     private Instant updatedAt;
+
     @Column(name = "created_at")
     private Instant createdAt;
-
 }

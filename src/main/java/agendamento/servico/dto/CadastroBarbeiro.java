@@ -8,8 +8,11 @@ import java.util.Set;
 public record CadastroBarbeiro(
         @NotBlank
         String nome,
-        @NotBlank
-        String caminhoImagem,
+
+        @NotBlank()
+        @NotNull
         Set<Long> servicos,
-        Set<Long> horarios
-) { }
+
+        @NotBlank()
+        @NotNull
+        Set<Long> horarios) { }

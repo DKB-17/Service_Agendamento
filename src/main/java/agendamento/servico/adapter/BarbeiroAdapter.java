@@ -13,7 +13,7 @@ public class BarbeiroAdapter {
 
     public static RegistroBarbeiro fromEntityToRegistroBarbeiro(Barbeiro barbeiro) {
 
-        String caminhoImagem = (barbeiro.getImagem() != null) ? barbeiro.getImagem().getCaminho() : null;
+        String caminhoImagem = (barbeiro.getImagem() != null) ? barbeiro.getImagem().getBase64Imagem() : null;
 
         Set<RegistroServico> servicos = barbeiro.getServicoBarbeiro() != null
                 ? barbeiro.getServicoBarbeiro().stream()
@@ -49,7 +49,7 @@ public class BarbeiroAdapter {
     }
     public static RegistroBarbeiroAgenda fromEntityToRegistroBarbeiroAgenda(Barbeiro barbeiro) {
 
-        String caminhoImagem = (barbeiro.getImagem() != null) ? barbeiro.getImagem().getCaminho() : null;
+        String caminhoImagem = (barbeiro.getImagem() != null) ? barbeiro.getImagem().getBase64Imagem() : null;
 
         return new RegistroBarbeiroAgenda(
                 barbeiro.getId(),

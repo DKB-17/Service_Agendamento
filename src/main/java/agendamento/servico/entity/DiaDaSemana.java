@@ -13,5 +13,7 @@ public class DiaDaSemana {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "descricao")
     private String descricao;
 }

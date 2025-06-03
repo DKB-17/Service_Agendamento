@@ -1,4 +1,4 @@
-package agendamento.servico.entity;
+package agendamento.servico.entity.enums;
 
 public enum Etapa {
         PENDENTE,

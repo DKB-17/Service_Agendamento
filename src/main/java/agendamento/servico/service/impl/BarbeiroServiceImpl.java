@@ -7,10 +7,10 @@ import agendamento.servico.dto.RegistroBarbeiro;
 import agendamento.servico.entity.*;
 import agendamento.servico.repository.*;
 import agendamento.servico.service.BarbeiroService;
-import agendamento.servico.service.ServicoService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 import java.util.*;
@@ -29,14 +29,10 @@ public class BarbeiroServiceImpl implements BarbeiroService {
     @Override
     @Transactional
     public RegistroBarbeiro cadastrarBarbeiro(CadastroBarbeiro dados) {
-
-        Imagem imagem = new Imagem(null, dados.caminhoImagem());
-        imagem = this.imagemRepository.save(imagem);
-
         Barbeiro barbeiro = new Barbeiro(
                 null,
                 dados.nome(),
-                imagem,
+                null,
                 new ArrayList<>(),
                 new ArrayList<>(),
                 null,
@@ -44,46 +40,36 @@ public class BarbeiroServiceImpl implements BarbeiroService {
                 Instant.now()
         );
 
-        barbeiro = this.barbeiroRepository.save(barbeiro);
+        Barbeiro barbeiroSalvo = this.barbeiroRepository.save(barbeiro);
 
-        if (dados.servicos() != null && !dados.servicos().isEmpty()) {
+        List<Servico> servicosExistentes = servicoRepository.findAllById(dados.servicos());
 
-            List<Servico> servicosExistentes = servicoRepository.findAllById(dados.servicos());
-
-            for (Servico servico : servicosExistentes) {
-                if (servico.getDeletedAt() == null) {
-                    ServicoBarbeiro servicoBarbeiro = new ServicoBarbeiro(
-                            servico,
-                            barbeiro
-                    );
-                    barbeiro.getServicoBarbeiro().add(servicoBarbeiro);
-                    servico.getServicoBarbeiro().add(servicoBarbeiro);
-                    this.servicoBarbeiroRepository.save(servicoBarbeiro);
-                }
+        servicosExistentes.forEach(servico -> {
+            if (servico.getDeletedAt() == null) {
+                ServicoBarbeiro servicoBarbeiro = new ServicoBarbeiro(
+                        servico,
+                        barbeiroSalvo
+                );
+                barbeiroSalvo.getServicoBarbeiro().add(servicoBarbeiro);
+                servico.getServicoBarbeiro().add(servicoBarbeiro);
             }
+        });
 
-        }
+        List<Horario> horariosExistentes = horarioRepository.findAllById(dados.horarios());
 
-
-        if (dados.horarios() != null && !dados.horarios().isEmpty()) {
-            List<Horario> horariosExistentes = horarioRepository.findAllById(dados.horarios());
-
-            for (Horario horario : horariosExistentes) {
-                if (horario.getDeletedAt() == null) {
-                    HorarioBarbeiro horarioBarbeiro = new HorarioBarbeiro(
-                            horario,
-                            barbeiro
-                    );
-                    barbeiro.getHorarioBarbeiro().add(horarioBarbeiro);
-                    horario.getHorarioBarbeiro().add(horarioBarbeiro);
-                    this.horarioBarbeiroRepository.save(horarioBarbeiro);
-                }
+        horariosExistentes.forEach(horario -> {
+            if (horario.getDeletedAt() == null) {
+                HorarioBarbeiro horarioBarbeiro = new HorarioBarbeiro(
+                        horario,
+                        barbeiroSalvo
+                );
+                barbeiroSalvo.getHorarioBarbeiro().add(horarioBarbeiro);
+                horario.getHorarioBarbeiro().add(horarioBarbeiro);
             }
+        });
 
-        }
-
-        barbeiro = this.barbeiroRepository.save(barbeiro);
-        return BarbeiroAdapter.fromEntityToRegistroBarbeiro(barbeiro);
+        Barbeiro barbeiroAlterado = this.barbeiroRepository.saveAndFlush(barbeiroSalvo);
+        return BarbeiroAdapter.fromEntityToRegistroBarbeiro(barbeiroAlterado);
     }
 
     @Override
@@ -102,17 +88,13 @@ public class BarbeiroServiceImpl implements BarbeiroService {
     }
 
     @Override
-    public RegistroBarbeiro atualizarBarbeiro(AtualizarBarbeiro dados) {
-        Optional<Barbeiro> barbeiro = this.barbeiroRepository.findById(dados.id());
-        if (barbeiro.isEmpty() || barbeiro.get().getDeletedAt() != null) {
-            throw new RuntimeException("Registro de barbeiro nao existe");
-        } else {
-            if (dados.nome() != null && !dados.nome().isBlank()){
-                barbeiro.get().setNome(dados.nome());
-            }
-            if (dados.caminhoImagem() != null && !dados.caminhoImagem().isBlank()){
-                barbeiro.get().getImagem().setCaminho(dados.caminhoImagem());
-            }
+    public RegistroBarbeiro atualizarBarbeiro(AtualizarBarbeiro dados) {{
+
+        Barbeiro barbeiro = this.buscarBarbeiroPorId(dados.id());
+
+        barbeiro.setNome(dados.nome());
+        barbeiro.getImagem().setBase64Imagem(dados.caminhoImagem());
+
             if (dados.servicos() != null && !dados.servicos().isEmpty()) {
                 List<Servico> servicosExistentes = servicoRepository.findAllById(dados.servicos());
 
@@ -120,9 +102,9 @@ public class BarbeiroServiceImpl implements BarbeiroService {
                     if (servico.getDeletedAt() == null) {
                         ServicoBarbeiro servicoBarbeiro = new ServicoBarbeiro(
                                 servico,
-                                barbeiro.get()
+                                barbeiro
                         );
-                        barbeiro.get().getServicoBarbeiro().add(servicoBarbeiro);
+                        barbeiro.getServicoBarbeiro().add(servicoBarbeiro);
                         servico.getServicoBarbeiro().add(servicoBarbeiro);
                         this.servicoBarbeiroRepository.save(servicoBarbeiro);
                     }
@@ -135,16 +117,16 @@ public class BarbeiroServiceImpl implements BarbeiroService {
                     if (horario.getDeletedAt() == null) {
                         HorarioBarbeiro horarioBarbeiro = new HorarioBarbeiro(
                                 horario,
-                                barbeiro.get()
+                                barbeiro
                         );
-                        barbeiro.get().getHorarioBarbeiro().add(horarioBarbeiro);
+                        barbeiro.getHorarioBarbeiro().add(horarioBarbeiro);
                         horario.getHorarioBarbeiro().add(horarioBarbeiro);
                         this.horarioBarbeiroRepository.save(horarioBarbeiro);
                     }
                 }
             }
-            barbeiro.get().setUpdatedAt(Instant.now());
-            return BarbeiroAdapter.fromEntityToRegistroBarbeiro(this.barbeiroRepository.save(barbeiro.get()));
+            barbeiro.setUpdatedAt(Instant.now());
+            return BarbeiroAdapter.fromEntityToRegistroBarbeiro(this.barbeiroRepository.save(barbeiro));
         }
     }
 
@@ -160,14 +142,38 @@ public class BarbeiroServiceImpl implements BarbeiroService {
 
     @Override
     public RegistroBarbeiro ativarBarbeiro(Long id) {
-        Optional<Barbeiro> barbeiro = this.barbeiroRepository.findById(id);
-        if (barbeiro.isEmpty()){
-            throw new RuntimeException("Registro de barbeiro nao existe");
-        } else {
-            barbeiro.get().setDeletedAt(null);
-            return BarbeiroAdapter.fromEntityToRegistroBarbeiro(this.barbeiroRepository.save(barbeiro.get()));
-        }
+        Barbeiro barbeiro = this.barbeiroRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Registro de barbeiro nao existe"));
+        barbeiro.setDeletedAt(null);
+        return BarbeiroAdapter.fromEntityToRegistroBarbeiro(this.barbeiroRepository.save(barbeiro));
+    }
+
+    @Override
+    public byte[] buscarImagemDoBarbeiro (Long idDoBarbeiro){
+        Barbeiro barbeiroSelecionado = this.buscarBarbeiroPorId(idDoBarbeiro);
+        return Base64.getDecoder().decode(barbeiroSelecionado.getImagem().getBase64Imagem());
+    }
+
+    @Override
+    @Transactional
+    public void atribuirImagemBarbeiro(MultipartFile file, Long idBarbeiro){
+        Barbeiro barbeiroSelecionado = this.buscarBarbeiroPorId(idBarbeiro);
+        barbeiroSelecionado
+                .setImagem(new Imagem(null, this.transformarImagem(file)));
+        this.barbeiroRepository.saveAndFlush(barbeiroSelecionado);
     }
 
 
+    private Barbeiro buscarBarbeiroPorId(Long id){
+        return this.barbeiroRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Registro de barbeiro nao existe"));
+    }
+
+    private String transformarImagem(MultipartFile arquivoImagem){
+        try{
+            return Base64.getEncoder().encodeToString(arquivoImagem.getBytes());
+        } catch (Exception exception){
+            throw new RuntimeException(exception.getMessage());
+        }
+    }
 }

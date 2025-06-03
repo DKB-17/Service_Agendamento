@@ -1,21 +1,14 @@
-CREATE TABLE dias_da_semana (
-                                id SERIAL PRIMARY KEY ,
-                                descricao VARCHAR(14)
-);
-
 CREATE TABLE horarios (
                             id SERIAL PRIMARY KEY,
                             inicio time,
                             fim time,
-                            dia_da_semana_id integer,
-                            FOREIGN KEY (dia_da_semana_id) REFERENCES dias_da_semana(id),
                             deleted_at timestamp,
                             updated_at timestamp,
                             created_at timestamp
 );
 CREATE TABLE imagens (
                             id SERIAL PRIMARY KEY ,
-                            caminho_link varchar(225)
+                            base64_imagem TEXT
 );
 
 CREATE TABLE barbeiros (
@@ -152,17 +145,3 @@ CREATE TABLE agendas (
      id SERIAL PRIMARY KEY ,
      dia date
  );
-
-INSERT INTO dias_da_semana (descricao) values ('Segunda-feira');
-
-INSERT INTO dias_da_semana (descricao) values ('Terça-feira');
-
-INSERT INTO dias_da_semana (descricao) values ('Quarta-feira');
-
-INSERT INTO dias_da_semana (descricao) values ('Quinta-feira');
-
-INSERT INTO dias_da_semana (descricao) values ('Sexta-feira');
-
-INSERT INTO dias_da_semana (descricao) values ('Sábado');
-
-INSERT INTO dias_da_semana (descricao) values ('Domingo');

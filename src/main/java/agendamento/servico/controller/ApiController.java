@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiController {
 
     @GetMapping
-    public ResponseEntity index() {
+    public ResponseEntity<String> index() {
         return ResponseEntity.ok().body("{\n" +
                 "  \"success\": true,\n" +
                 "  \"message\": \"Operação realizada com sucesso\"\n" +
