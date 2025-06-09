@@ -70,15 +70,13 @@ public class BarbeiroController {
         }
     }
 
-    @PutMapping("/editar")
-    @Transactional
+    @PutMapping()
+
     public ResponseEntity<RegistroBarbeiro> atualizarBarbeiro(@RequestBody @Valid AtualizarBarbeiro dados){
-        try {
+
             RegistroBarbeiro barbeiro = this.barbeiroService.atualizarBarbeiro(dados);
             return ResponseEntity.ok(barbeiro);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+
     }
 
     @PutMapping("/{id}/desativar")

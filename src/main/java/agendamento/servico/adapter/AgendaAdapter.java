@@ -13,7 +13,8 @@ public class AgendaAdapter {
                 ServicoAdapter.fromEntityToRegistroServico(agenda.getServico()),
                 BarbeiroAdapter.fromEntityToRegistroBarbeiroAgenda(agenda.getBarbeiro()),
                 agenda.getDia(),
-                agenda.getValor()
+                agenda.getValor(),
+                agenda.getEtapa()
         );
     }
 }

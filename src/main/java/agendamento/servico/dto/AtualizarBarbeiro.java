@@ -12,7 +12,6 @@ public record AtualizarBarbeiro(
         @NotBlank
         String nome,
 
-        @NotBlank
         String caminhoImagem,
         Set<Long> servicos,
         Set<Long> horarios

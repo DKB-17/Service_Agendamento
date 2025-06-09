@@ -22,7 +22,6 @@ public class BarbeiroServiceImpl implements BarbeiroService {
     private BarbeiroRepository barbeiroRepository;
     private ServicoRepository servicoRepository;
     private HorarioRepository horarioRepository;
-    private ImagemRepository imagemRepository;
     private ServicoBarbeiroRepository servicoBarbeiroRepository;
     private HorarioBarbeiroRepository horarioBarbeiroRepository;
 
@@ -52,6 +51,7 @@ public class BarbeiroServiceImpl implements BarbeiroService {
                 );
                 barbeiroSalvo.getServicoBarbeiro().add(servicoBarbeiro);
                 servico.getServicoBarbeiro().add(servicoBarbeiro);
+
             }
         });
 
@@ -68,13 +68,17 @@ public class BarbeiroServiceImpl implements BarbeiroService {
             }
         });
 
-        Barbeiro barbeiroAlterado = this.barbeiroRepository.saveAndFlush(barbeiroSalvo);
+        Barbeiro barbeiroAlterado = this.barbeiroRepository.save(barbeiroSalvo);
         return BarbeiroAdapter.fromEntityToRegistroBarbeiro(barbeiroAlterado);
     }
 
     @Override
     public List<RegistroBarbeiro> listarBarbeiros() {
-        return this.barbeiroRepository.findByDeletedAtIsNull().stream().map(BarbeiroAdapter::fromEntityToRegistroBarbeiro).toList();
+        return this.barbeiroRepository
+                .findByDeletedAtIsNull()
+                .stream()
+                .map(BarbeiroAdapter::fromEntityToRegistroBarbeiro)
+                .toList();
     }
 
     @Override
@@ -88,46 +92,75 @@ public class BarbeiroServiceImpl implements BarbeiroService {
     }
 
     @Override
-    public RegistroBarbeiro atualizarBarbeiro(AtualizarBarbeiro dados) {{
+    public RegistroBarbeiro atualizarBarbeiro(AtualizarBarbeiro dados) {
 
         Barbeiro barbeiro = this.buscarBarbeiroPorId(dados.id());
 
         barbeiro.setNome(dados.nome());
-        barbeiro.getImagem().setBase64Imagem(dados.caminhoImagem());
 
-            if (dados.servicos() != null && !dados.servicos().isEmpty()) {
-                List<Servico> servicosExistentes = servicoRepository.findAllById(dados.servicos());
-
-                for (Servico servico : servicosExistentes) {
-                    if (servico.getDeletedAt() == null) {
-                        ServicoBarbeiro servicoBarbeiro = new ServicoBarbeiro(
-                                servico,
-                                barbeiro
-                        );
-                        barbeiro.getServicoBarbeiro().add(servicoBarbeiro);
-                        servico.getServicoBarbeiro().add(servicoBarbeiro);
-                        this.servicoBarbeiroRepository.save(servicoBarbeiro);
-                    }
-                }
-            }
-            if (dados.horarios() != null && !dados.horarios().isEmpty()) {
-                List<Horario> horariosExistentes = horarioRepository.findAllById(dados.horarios());
-
-                for (Horario horario : horariosExistentes) {
-                    if (horario.getDeletedAt() == null) {
-                        HorarioBarbeiro horarioBarbeiro = new HorarioBarbeiro(
-                                horario,
-                                barbeiro
-                        );
-                        barbeiro.getHorarioBarbeiro().add(horarioBarbeiro);
-                        horario.getHorarioBarbeiro().add(horarioBarbeiro);
-                        this.horarioBarbeiroRepository.save(horarioBarbeiro);
-                    }
-                }
-            }
-            barbeiro.setUpdatedAt(Instant.now());
-            return BarbeiroAdapter.fromEntityToRegistroBarbeiro(this.barbeiroRepository.save(barbeiro));
+        if (dados.caminhoImagem() != null) {
+            barbeiro.getImagem().setBase64Imagem(dados.caminhoImagem());
         }
+
+        if (dados.servicos() != null && !dados.servicos().isEmpty()) {
+            List<Servico> servicosExistentes = servicoRepository.findAllById(dados.servicos());
+
+            for(ServicoBarbeiro sb: barbeiro.getServicoBarbeiro()) {
+                boolean manter = false;
+                for (Servico se : servicosExistentes) {
+                    if (sb.getServico().getId().equals(se.getId())) {
+                        servicosExistentes.remove(se);
+                        manter = true;
+                        break;
+                    }
+                }
+                if (!manter) {
+                    barbeiro.getServicoBarbeiro().remove(sb);
+                }
+            }
+
+            for (Servico servico : servicosExistentes) {
+                if (servico.getDeletedAt() == null) {
+                    ServicoBarbeiro servicoBarbeiro = new ServicoBarbeiro(
+                            servico,
+                            barbeiro
+                    );
+                    barbeiro.getServicoBarbeiro().add(servicoBarbeiro);
+                    servico.getServicoBarbeiro().add(servicoBarbeiro);
+                }
+            }
+        }
+        if (dados.horarios() != null && !dados.horarios().isEmpty()) {
+            List<Horario> horariosExistentes = horarioRepository.findAllById(dados.horarios());
+
+            for(HorarioBarbeiro hb: barbeiro.getHorarioBarbeiro()) {
+                boolean manter = false;
+                for (Horario he : horariosExistentes) {
+                    if (hb.getHorario().getId().equals(he.getId())) {
+                        horariosExistentes.remove(he);
+                        manter = true;
+                        break;
+                    }
+                }
+                if (!manter) {
+                    barbeiro.getHorarioBarbeiro().remove(hb);
+                }
+            }
+
+
+            for (Horario horario : horariosExistentes) {
+                if (horario.getDeletedAt() == null) {
+                    HorarioBarbeiro horarioBarbeiro = new HorarioBarbeiro(
+                            horario,
+                            barbeiro
+                    );
+                    barbeiro.getHorarioBarbeiro().add(horarioBarbeiro);
+                    horario.getHorarioBarbeiro().add(horarioBarbeiro);
+                }
+            }
+        }
+        barbeiro.setUpdatedAt(Instant.now());
+        return BarbeiroAdapter.fromEntityToRegistroBarbeiro(this.barbeiroRepository.save(barbeiro));
     }
 
     @Override

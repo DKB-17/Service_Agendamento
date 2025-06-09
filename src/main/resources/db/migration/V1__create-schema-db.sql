@@ -6,6 +6,14 @@ CREATE TABLE horarios (
                             updated_at timestamp,
                             created_at timestamp
 );
+
+CREATE TABLE horarios_invalidos(
+        id SERIAL PRIMARY KEY,
+        horario_id integer,
+        FOREIGN KEY (horario_id) REFERENCES horarios(id)
+);
+
+
 CREATE TABLE imagens (
                             id SERIAL PRIMARY KEY ,
                             base64_imagem TEXT
@@ -79,8 +87,6 @@ CREATE TABLE caixas (
                           created_at timestamp
 );
 
-CREATE TYPE Etapa AS ENUM ('PENDENTE', 'CONFIRMADO', 'CANCELADO', 'CONCLUIDO');
-
 CREATE TABLE agendas (
                            id SERIAL PRIMARY KEY,
                            usuario_id integer,
@@ -95,7 +101,7 @@ CREATE TABLE agendas (
                             FOREIGN KEY (caixa_id) REFERENCES caixas(id),
                            dia date,
                            valor numeric(7,2),
-                           Etapa etapa,
+                           etapa varchar(12),
                            deleted_at timestamp,
                            updated_at timestamp,
                            created_at timestamp

@@ -2,6 +2,7 @@ package agendamento.servico.dto;
 
 import jakarta.validation.constraints.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public record CadastroAgenda(
@@ -21,6 +22,5 @@ public record CadastroAgenda(
                 @Positive
         Long servicoId,
         @NotNull
-                @FutureOrPresent
-        Date dia
+        LocalDate dia
 ) { }

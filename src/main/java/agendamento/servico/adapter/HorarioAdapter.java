@@ -24,6 +24,7 @@ public class HorarioAdapter {
                 dados.getId(),
                 dados.getHorarioInicio(),
                 dados.getHorarioFim(),
+                dados.getDeletedAt(),
                 dados.getCreatedAt(),
                 dados.getUpdatedAt()
         );

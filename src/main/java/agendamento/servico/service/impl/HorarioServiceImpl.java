@@ -75,7 +75,7 @@ public class HorarioServiceImpl implements HorarioService {
     private Horario buscarHorarioPorId(Long id) {
         Horario horario = this.horarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Registro de horario nao existe"));
-        if(horario.getDeletedAt() == null){throw new RuntimeException("Registro de horario nao existe");};
+        if(horario.getDeletedAt() != null){throw new RuntimeException("Registro de horario nao existe");};
         return horario;
     }
 }

@@ -1,18 +1,14 @@
 package agendamento.servico.dto;
 
 import agendamento.servico.entity.enums.Etapa;
-import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public record RegistroAgenda(
+public record FiltroAgenda(
         Long id,
         String nome,
         String contato,
-        RegistroHorario registroHorario,
-        RegistroServico registroServico,
-        RegistroBarbeiroAgenda registroBarbeiro,
         LocalDate dia,
         BigDecimal valor,
         Etapa etapa

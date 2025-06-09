@@ -1,8 +1,11 @@
 package agendamento.servico.controller;
 
+import agendamento.servico.dto.AtualizarAgenda;
 import agendamento.servico.dto.CadastroAgenda;
+import agendamento.servico.dto.FiltroAgenda;
 import agendamento.servico.dto.RegistroAgenda;
 import agendamento.servico.service.AgendaService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -10,8 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/agendamentos")
+@RequestMapping("/agendas")
 @CrossOrigin
 public class AgendaController {
 
@@ -34,4 +39,51 @@ public class AgendaController {
         }
     }
 
+    @PostMapping("/filtro")
+    public ResponseEntity<List<RegistroAgenda>> buscarAgendaPorFiltro(@RequestBody FiltroAgenda filtro){
+        try{
+            List<RegistroAgenda> registroAgenda = this.agendaService.buscarAgendaPorFiltro(filtro);
+            return ResponseEntity.status(HttpStatus.OK).body(registroAgenda);
+        }catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<RegistroAgenda>> listarAgendas() {
+        List<RegistroAgenda> lista = this.agendaService.listarAgendas();
+        return ResponseEntity.status(HttpStatus.OK).body(lista);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RegistroAgenda> buscarAgendaPorId(@PathVariable Long id) {
+        try{
+            RegistroAgenda registroAgenda = this.agendaService.buscarAgenda(id);
+            return ResponseEntity.status(HttpStatus.OK).body(registroAgenda);
+        }catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<RegistroAgenda> atualizarAgenda(@PathVariable Long id, @RequestBody @Valid AtualizarAgenda agenda) {
+        try{
+            RegistroAgenda regiAtualizado = this.agendaService.alterarAgenda(id, agenda);
+            return ResponseEntity.status(HttpStatus.OK).body(regiAtualizado);
+        } catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/desativar")
+    @Transactional
+    public ResponseEntity<HttpStatus> desativarAgenda(@PathVariable Long id) {
+        try{
+            this.agendaService.desativarAgenda(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }

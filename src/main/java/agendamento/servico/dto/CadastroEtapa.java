@@ -6,6 +6,5 @@ public record CadastroEtapa(
         @NotBlank
         String sigla,
         @NotBlank
-        String descricao
-) {
+        String descricao) {
 }

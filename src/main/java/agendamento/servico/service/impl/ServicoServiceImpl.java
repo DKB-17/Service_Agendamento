@@ -38,16 +38,6 @@ public class ServicoServiceImpl implements ServicoService {
     }
 
     @Override
-    public void desativarServico(Long id) {
-        Optional<Servico> servico = this.servicoRepository.findById(id);
-        if(servico.isEmpty() || servico.get().getDeletedAt() != null) {
-            throw new RuntimeException("Registro de servico nao existe");
-        } else {
-            servico.get().setDeletedAt(Instant.now());
-        }
-    }
-
-    @Override
     public RegistroServico ativarServico(Long id) {
         Optional<Servico> servico = this.servicoRepository.findById(id);
         if(servico.isEmpty()) {
@@ -59,9 +49,19 @@ public class ServicoServiceImpl implements ServicoService {
     }
 
     @Override
+    public void desativarServico(Long id) {
+        Servico servico = this.servicoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Erro ao buscar serviço"));
+
+        servico.setDeletedAt(Instant.now());
+        this.servicoRepository.save(servico);
+    }
+
+    @Override
     public RegistroServico atualizarServico(AtualizarServico dados) {
-        Servico servico = this.servicoRepository.findById(dados.id())
-                .orElseThrow(() -> new RuntimeException(""));
+        Servico servico = this.servicoRepository
+                .findById(dados.id())
+                .orElseThrow(() -> new RuntimeException("Erro ao buscar serviço"));
 
         servico.setDescricao(dados.descricao());
         servico.setValor(dados.valor());
@@ -72,6 +72,10 @@ public class ServicoServiceImpl implements ServicoService {
 
     @Override
     public List<RegistroServico> listarServicos() {
-        return this.servicoRepository.findByDeletedAtIsNull().stream().map(ServicoAdapter::fromEntityToRegistroServico).toList();
+        return this.servicoRepository
+                .findByDeletedAtIsNull()
+                .stream()
+                .map(ServicoAdapter::fromEntityToRegistroServico)
+                .toList();
     }
 }

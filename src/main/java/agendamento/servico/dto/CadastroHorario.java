@@ -8,5 +8,4 @@ public record CadastroHorario(
         @NotNull
         LocalTime horaInicio,
         @NotNull
-        LocalTime horaFim
-) { }
+        LocalTime horaFim) { }

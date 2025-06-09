@@ -6,16 +6,17 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 
-@Table(name= "agendas")
-@Entity(name = "agenda")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name= "agendas")
+@Entity(name = "agenda")
 @EqualsAndHashCode(of = "id")
-@ToString
 public class Agenda {
 
     @Id
@@ -43,13 +44,12 @@ public class Agenda {
     private Caixa caixa;
 
     @Column(name = "dia")
-    private Date dia;
+    private LocalDate dia;
 
     @Column(name = "valor")
     private BigDecimal valor;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "etapa", columnDefinition = "Etapa")
+    @Column(name = "etapa")
     private Etapa etapa;
 
     @Column(name = "deleted_at")

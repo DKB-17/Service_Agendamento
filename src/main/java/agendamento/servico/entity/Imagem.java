@@ -16,7 +16,6 @@ public class Imagem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     @Column(name = "base64_imagem")
     private String base64Imagem;
 

@@ -19,21 +19,29 @@ public class Cliente{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nome")
-    private String nome;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "imagem_id")
+    private Imagem imagem;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
     @Column(name = "cpf")
     private String cpf;
 
-    @Column(name = "contato")
-    private String contato;
+    @Column(name = "email")
+    private String email;
 
-    @Column(name = "delete_at")
-    private Instant deleteAt;
+    @Column(name = "password")
+    private String password;
 
-    @Column(name = "update_at")
-    private Instant updateAt;
+    @Column(name = "deleted_at")
+    private Instant deletedAt;
 
-    @Column(name = "create_at")
-    private Instant createAt;
+    @Column(name = "updated_at")
+    private Instant updatedAt;
+
+    @Column(name = "created_at")
+    private Instant createdAt;
 }

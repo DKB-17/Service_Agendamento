@@ -6,7 +6,9 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "caixas")
 @Entity(name = "Caixa")
@@ -26,7 +28,11 @@ public class Caixa {
     private BigDecimal lucro;
 
     @Column(name = "dia")
-    private Date dia;
+    private LocalDate dia;
+
+    @OneToMany
+    @JoinColumn(name = "agenda_id")
+    private List<Agenda> agendas;
 
     @Column(name = "deleted_at")
     private Instant deleteAt;

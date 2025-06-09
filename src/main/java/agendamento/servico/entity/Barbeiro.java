@@ -27,10 +27,10 @@ public class Barbeiro {
     @JoinColumn(name = "imagem_id")
     private Imagem imagem;
 
-    @OneToMany(mappedBy = "barbeiro")
+    @OneToMany(mappedBy = "barbeiro", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServicoBarbeiro> servicoBarbeiro;
 
-    @OneToMany(mappedBy = "barbeiro")
+    @OneToMany(mappedBy = "barbeiro", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HorarioBarbeiro> horarioBarbeiro;
 
     @Column(name = "deleted_at")

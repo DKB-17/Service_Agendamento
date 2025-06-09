@@ -7,6 +7,7 @@ public record RegistroHorario(
         Long id,
         LocalTime horarioInicio,
         LocalTime horarioFim,
+        Instant deletedAt,
         Instant createdAt,
         Instant updatedAt
 ) {

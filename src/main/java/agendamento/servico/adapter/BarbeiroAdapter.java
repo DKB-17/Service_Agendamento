@@ -4,7 +4,6 @@ import agendamento.servico.dto.*;
 import agendamento.servico.entity.Barbeiro;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,12 +18,14 @@ public class BarbeiroAdapter {
                 ? barbeiro.getServicoBarbeiro().stream()
                 .map(sb -> new RegistroServico(
                         sb.getServico().getId(),
-                        sb.getServico().getDescricao(), // Pega o nome do Servico associado
+                        sb.getServico().getDescricao(),
                         sb.getServico().getValor(),
                         sb.getServico().getCreatedAt(),
                         sb.getServico().getUpdatedAt()))
                 .collect(Collectors.toSet())
                 : Collections.emptySet();
+
+
 
         Set<RegistroHorario> horarios = barbeiro.getHorarioBarbeiro() != null
                 ? barbeiro.getHorarioBarbeiro().stream()
@@ -32,6 +33,7 @@ public class BarbeiroAdapter {
                         hb.getHorario().getId(),
                         hb.getHorario().getHorarioInicio(),
                         hb.getHorario().getHorarioFim(),
+                        hb.getHorario().getDeletedAt(),
                         hb.getHorario().getCreatedAt(),
                         hb.getHorario().getUpdatedAt()))
                 .collect(Collectors.toSet())

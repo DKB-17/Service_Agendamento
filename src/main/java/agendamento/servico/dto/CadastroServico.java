@@ -10,10 +10,11 @@ import java.time.Duration;
 import java.time.LocalTime;
 
 public record CadastroServico(
+
         @NotBlank
         String descricao,
+
         @NotNull
-                @Positive
-        BigDecimal valor
-) {
+        @Positive
+        BigDecimal valor) {
 }
