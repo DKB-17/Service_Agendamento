@@ -2,6 +2,7 @@ package agendamento.servico.controller;
 
 import agendamento.servico.dto.AtualizarServico;
 import agendamento.servico.dto.CadastroServico;
+import agendamento.servico.dto.FiltroServico;
 import agendamento.servico.dto.RegistroServico;
 import agendamento.servico.service.ServicoService;
 import jakarta.validation.Valid;
@@ -34,6 +35,16 @@ public class ServicoController {
             RegistroServico registroServico = this.servicoService.cadastrarServico(dados);
             return ResponseEntity.status(HttpStatus.CREATED).body(registroServico);
         } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @PostMapping("/filtro")
+    public ResponseEntity<List<RegistroServico>> buscarServicoPorFiltro (@RequestBody FiltroServico filtro){
+        try{
+            List<RegistroServico> servicos = this.servicoService.buscarServicoPorFiltro(filtro);
+            return ResponseEntity.ok(servicos);
+        }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
     }

@@ -2,6 +2,7 @@ package agendamento.servico.controller;
 
 import agendamento.servico.dto.AtualizarHorario;
 import agendamento.servico.dto.CadastroHorario;
+import agendamento.servico.dto.FiltroHorario;
 import agendamento.servico.dto.RegistroHorario;
 import agendamento.servico.service.HorarioService;
 import jakarta.transaction.Transactional;
@@ -36,6 +37,16 @@ public class HorarioController {
             }else {
                 throw new RuntimeException("Horario invalidos");
             }
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @PostMapping("/filtro")
+    public ResponseEntity<List<RegistroHorario>> buscarHorarioPorFiltro(@RequestBody FiltroHorario filtro){
+        try{
+            List<RegistroHorario> registroHorarios = this.horarioService.buscarHorariosPorFiltro(filtro);
+            return ResponseEntity.status(HttpStatus.OK).body(registroHorarios);
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }

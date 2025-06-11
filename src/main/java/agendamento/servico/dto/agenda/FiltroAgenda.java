@@ -1,4 +1,4 @@
-package agendamento.servico.dto;
+package agendamento.servico.dto.agenda;
 
 import agendamento.servico.entity.enums.Etapa;
 

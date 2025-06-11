@@ -1,7 +1,10 @@
 package agendamento.servico.adapter;
 
-import agendamento.servico.dto.RegistroAgenda;
+import agendamento.servico.dto.agenda.RegistroAgenda;
 import agendamento.servico.entity.Agenda;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AgendaAdapter {
     public static RegistroAgenda fromEntityToRegistroAgenda(Agenda agenda){
@@ -16,5 +19,9 @@ public class AgendaAdapter {
                 agenda.getValor(),
                 agenda.getEtapa()
         );
+    }
+
+    public static List<RegistroAgenda> converter (List<Agenda> agenda){
+        return agenda.stream().map(AgendaAdapter::fromEntityToRegistroAgenda).collect(Collectors.toList());
     }
 }

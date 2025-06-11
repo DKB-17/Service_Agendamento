@@ -1,8 +1,7 @@
 package agendamento.servico.adapter;
 
-import agendamento.servico.dto.CadastroAgenda;
+import agendamento.servico.dto.agenda.CadastroAgenda;
 import agendamento.servico.entity.Usuario;
-import jakarta.validation.constraints.Null;
 
 import java.time.Instant;
 

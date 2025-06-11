@@ -1,9 +1,9 @@
 package agendamento.servico.controller;
 
-import agendamento.servico.dto.AtualizarAgenda;
-import agendamento.servico.dto.CadastroAgenda;
-import agendamento.servico.dto.FiltroAgenda;
-import agendamento.servico.dto.RegistroAgenda;
+import agendamento.servico.dto.agenda.AtualizarAgenda;
+import agendamento.servico.dto.agenda.CadastroAgenda;
+import agendamento.servico.dto.agenda.FiltroAgenda;
+import agendamento.servico.dto.agenda.RegistroAgenda;
 import agendamento.servico.service.AgendaService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;

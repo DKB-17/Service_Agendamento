@@ -3,6 +3,7 @@ package agendamento.servico.service.impl;
 import agendamento.servico.adapter.HorarioAdapter;
 import agendamento.servico.dto.AtualizarHorario;
 import agendamento.servico.dto.CadastroHorario;
+import agendamento.servico.dto.FiltroHorario;
 import agendamento.servico.dto.RegistroHorario;
 import agendamento.servico.entity.Horario;
 import agendamento.servico.repository.HorarioRepository;
@@ -11,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -70,6 +72,20 @@ public class HorarioServiceImpl implements HorarioService {
         horario.setDeletedAt(null);
         return HorarioAdapter.fromEntityToRegistroHorario(horario);
 
+    }
+
+    @Override
+    public List<RegistroHorario> buscarHorariosPorFiltro (FiltroHorario horario) {
+        if (horario.id() != null) {
+            return Collections.singletonList(buscarHorario(horario.id()));
+        }
+        if (horario.horarioInicio() != null) {
+            return HorarioAdapter.converter(this.horarioRepository.findAllByHorarioInicio(horario.horarioInicio()));
+        }
+        if (horario.horarioFim() != null) {
+            return HorarioAdapter.converter(this.horarioRepository.findAllByHorarioFim(horario.horarioFim()));
+        }
+        return HorarioAdapter.converter(this.horarioRepository.findAll());
     }
 
     private Horario buscarHorarioPorId(Long id) {

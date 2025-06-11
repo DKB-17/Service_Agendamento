@@ -1,6 +1,6 @@
 package agendamento.servico.adapter;
 
-import agendamento.servico.dto.CadastroAgenda;
+import agendamento.servico.dto.agenda.CadastroAgenda;
 import agendamento.servico.dto.RegistroCaixa;
 import agendamento.servico.entity.Caixa;
 

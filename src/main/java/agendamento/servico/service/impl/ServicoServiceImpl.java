@@ -3,6 +3,7 @@ package agendamento.servico.service.impl;
 import agendamento.servico.adapter.ServicoAdapter;
 import agendamento.servico.dto.AtualizarServico;
 import agendamento.servico.dto.CadastroServico;
+import agendamento.servico.dto.FiltroServico;
 import agendamento.servico.dto.RegistroServico;
 import agendamento.servico.entity.Servico;
 import agendamento.servico.repository.ServicoRepository;
@@ -11,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,5 +79,19 @@ public class ServicoServiceImpl implements ServicoService {
                 .stream()
                 .map(ServicoAdapter::fromEntityToRegistroServico)
                 .toList();
+    }
+    
+    @Override
+    public List<RegistroServico> buscarServicoPorFiltro(FiltroServico servico){
+        if (servico.id() != null){
+            return Collections.singletonList(buscarServico(servico.id()));
+        }
+        if(servico.descricao() != null){
+            return ServicoAdapter.converter(this.servicoRepository.findAllByDescricao(servico.descricao()));
+        }
+        if(servico.valor() != null){
+            return ServicoAdapter.converter(this.servicoRepository.findAllByValor(servico.valor()));
+        }
+        return ServicoAdapter.converter(this.servicoRepository.findAll());
     }
 }

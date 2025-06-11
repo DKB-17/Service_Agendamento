@@ -1,7 +1,9 @@
-package agendamento.servico.dto;
+package agendamento.servico.dto.agenda;
 
+import agendamento.servico.dto.RegistroBarbeiroAgenda;
+import agendamento.servico.dto.RegistroHorario;
+import agendamento.servico.dto.RegistroServico;
 import agendamento.servico.entity.enums.Etapa;
-import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

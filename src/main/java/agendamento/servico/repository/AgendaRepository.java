@@ -6,12 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public interface AgendaRepository extends JpaRepository<Agenda, Long> {
-    Agenda findByDeletedAtIsNull();
-    Agenda findByUsuario_Nome(String nome);
-    Agenda findByDia(LocalDate dia);
-    Agenda findByValor(BigDecimal valor);
-    Agenda findByUsuario_Contato(String contato);
-    Agenda findByEtapa(Etapa etapa);
+    List<Agenda> findAllByUsuario_Nome(String nome);
+    List<Agenda> findAllByDia(LocalDate dia);
+    List<Agenda> findAllByValor(BigDecimal valor);
+    List<Agenda> findAllByUsuario_Contato(String contato);
+    List<Agenda> findAllByEtapa(Etapa etapa);
+
 }

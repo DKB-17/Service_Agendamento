@@ -1,6 +1,9 @@
 package agendamento.servico.service;
 
-import agendamento.servico.dto.*;
+import agendamento.servico.dto.agenda.AtualizarAgenda;
+import agendamento.servico.dto.agenda.CadastroAgenda;
+import agendamento.servico.dto.agenda.FiltroAgenda;
+import agendamento.servico.dto.agenda.RegistroAgenda;
 
 import java.util.List;
 

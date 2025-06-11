@@ -3,10 +3,10 @@ package agendamento.servico.service.impl;
 import agendamento.servico.adapter.AgendaAdapter;
 import agendamento.servico.adapter.CaixaAdapter;
 import agendamento.servico.adapter.UsuarioAdapter;
-import agendamento.servico.dto.AtualizarAgenda;
-import agendamento.servico.dto.CadastroAgenda;
-import agendamento.servico.dto.FiltroAgenda;
-import agendamento.servico.dto.RegistroAgenda;
+import agendamento.servico.dto.agenda.AtualizarAgenda;
+import agendamento.servico.dto.agenda.CadastroAgenda;
+import agendamento.servico.dto.agenda.FiltroAgenda;
+import agendamento.servico.dto.agenda.RegistroAgenda;
 import agendamento.servico.entity.*;
 import agendamento.servico.entity.enums.Etapa;
 import agendamento.servico.repository.*;
@@ -125,21 +125,21 @@ public class AgendaServiceImpl implements AgendaService {
             return Collections.singletonList(buscarAgenda(agenda.id()));
         }
         if (agenda.nome() != null) {
-            return Collections.singletonList(AgendaAdapter.fromEntityToRegistroAgenda(this.agendaRepository.findByUsuario_Nome(agenda.nome())));
+            return AgendaAdapter.converter(this.agendaRepository.findAllByUsuario_Nome(agenda.nome()));
         }
         if (agenda.dia() != null) {
-            return Collections.singletonList(AgendaAdapter.fromEntityToRegistroAgenda(this.agendaRepository.findByDia(agenda.dia())));
+            return AgendaAdapter.converter(this.agendaRepository.findAllByDia(agenda.dia()));
         }
         if (agenda.valor() != null) {
-            return Collections.singletonList(AgendaAdapter.fromEntityToRegistroAgenda(this.agendaRepository.findByValor(agenda.valor())));
+            return AgendaAdapter.converter(this.agendaRepository.findAllByValor(agenda.valor()));
         }
         if (agenda.contato() != null) {
-            return Collections.singletonList(AgendaAdapter.fromEntityToRegistroAgenda(this.agendaRepository.findByUsuario_Contato(agenda.contato())));
+            return AgendaAdapter.converter(this.agendaRepository.findAllByUsuario_Contato(agenda.contato()));
         }
         if (agenda.etapa() != null) {
-            return Collections.singletonList(AgendaAdapter.fromEntityToRegistroAgenda(this.agendaRepository.findByEtapa(agenda.etapa())));
+            return AgendaAdapter.converter(this.agendaRepository.findAllByEtapa(agenda.etapa()));
         }
-        return this.agendaRepository.findAll().stream().map(AgendaAdapter::fromEntityToRegistroAgenda).collect(Collectors.toList());
+        return AgendaAdapter.converter(this.agendaRepository.findAll());
     }
 
 

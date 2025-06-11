@@ -6,6 +6,8 @@ import agendamento.servico.entity.Horario;
 
 import java.time.Instant;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class HorarioAdapter {
     public static Horario fromCadastroHorarioToEntity(CadastroHorario dados){
@@ -28,5 +30,8 @@ public class HorarioAdapter {
                 dados.getCreatedAt(),
                 dados.getUpdatedAt()
         );
+    }
+    public static List<RegistroHorario> converter (List<Horario> horarios) {
+        return horarios.stream().map(HorarioAdapter::fromEntityToRegistroHorario).collect(Collectors.toList());
     }
 }

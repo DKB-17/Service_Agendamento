@@ -1,9 +1,8 @@
-package agendamento.servico.dto;
+package agendamento.servico.dto.agenda;
 
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public record CadastroAgenda(
         @NotBlank
