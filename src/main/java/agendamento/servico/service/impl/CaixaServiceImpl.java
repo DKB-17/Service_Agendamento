@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
@@ -130,5 +131,18 @@ public class CaixaServiceImpl implements CaixaService {
         return this.caixaRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Caixa inexistente"));
+    }
+
+    @Override
+    public BigDecimal calcularTicketMedio() {
+        BigDecimal faturamento = faturalmentoTotal();
+        Long totalAgendamentos = totalAgendamentos();
+
+        if (totalAgendamentos == 0) {
+            return BigDecimal.ZERO;
+        }
+        // Divide o faturamento total pelo número total de agendamentos para obter o ticket médio.
+        // Utiliza setScale para definir a precisão e RoundingMode para arredondamento.
+        return faturamento.divide(new BigDecimal(totalAgendamentos), 2, RoundingMode.HALF_UP);
     }
 }

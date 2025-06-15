@@ -209,4 +209,6 @@ public class BarbeiroServiceImpl implements BarbeiroService {
             throw new RuntimeException(exception.getMessage());
         }
     }
+
+
 }

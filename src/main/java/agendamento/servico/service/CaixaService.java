@@ -22,4 +22,6 @@ public interface CaixaService {
     List<ServicosVendidos> buscarServicoesMaisVendidos();
 
     Long totalAgendamentos();
+
+    BigDecimal calcularTicketMedio();
 }

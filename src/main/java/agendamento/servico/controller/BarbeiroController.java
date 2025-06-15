@@ -100,4 +100,5 @@ public class BarbeiroController {
             throw new RuntimeException(e.getMessage());
         }
     }
+
 }

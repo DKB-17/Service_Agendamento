@@ -5,21 +5,39 @@ import agendamento.servico.dto.AtualizarHorario;
 import agendamento.servico.dto.CadastroHorario;
 import agendamento.servico.dto.FiltroHorario;
 import agendamento.servico.dto.RegistroHorario;
+import agendamento.servico.entity.Agenda;
+import agendamento.servico.entity.Barbeiro;
 import agendamento.servico.entity.Horario;
+import agendamento.servico.repository.AgendaRepository;
+import agendamento.servico.repository.BarbeiroRepository;
 import agendamento.servico.repository.HorarioRepository;
 import agendamento.servico.service.HorarioService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class HorarioServiceImpl implements HorarioService {
 
-    private HorarioRepository horarioRepository;
+    private final HorarioRepository horarioRepository;
+    private final AgendaRepository agendaRepository;
+    private final BarbeiroRepository barbeiroRepository;
+
+    public HorarioServiceImpl(HorarioRepository horarioRepository, AgendaRepository agendaRepository, BarbeiroRepository barbeiroRepository) {
+        this.horarioRepository = horarioRepository;
+        this.agendaRepository = agendaRepository;
+        this.barbeiroRepository = barbeiroRepository;
+    }
+
 
     @Override
     public RegistroHorario cadastrarHorario(CadastroHorario dados) {
@@ -93,5 +111,43 @@ public class HorarioServiceImpl implements HorarioService {
                 .orElseThrow(() -> new RuntimeException("Registro de horario nao existe"));
         if(horario.getDeletedAt() != null){throw new RuntimeException("Registro de horario nao existe");};
         return horario;
+    }
+
+    private Barbeiro buscarBarbeiroPorId(Long id){
+        return this.barbeiroRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Registro de barbeiro nao existe"));
+    }
+
+    public List<RegistroHorario> listarHorariosDisponiveisNoDia(LocalDate dia, Long id) {
+
+
+
+        Barbeiro barbeiro = buscarBarbeiroPorId(id);
+        Set<Long> horariosDoBarbeiroIds = barbeiro.getHorarioBarbeiro().stream()
+                .map(hb -> hb.getHorario().getId())
+                .collect(Collectors.toSet());
+
+        List<Agenda> agendamentosNoDia = this.agendaRepository.findAllByDia(dia);
+
+        Set<Long> horariosAgendadosIds = agendamentosNoDia.stream()
+                .filter(agenda -> agenda.getDeletedAt() == null) // Apenas agendamentos ativos
+                .map(agenda -> agenda.getHorario().getId())
+                .collect(Collectors.toSet());
+
+        List<Agenda> agendamentosDoBarbeiroNoDia = agendaRepository.findAllByDia(dia).stream()
+                .filter(agenda -> agenda.getBarbeiro().getId().equals(id))
+                .toList();
+
+        Set<Long> horariosAgendadosParaBarbeiroIds = agendamentosDoBarbeiroNoDia.stream()
+                .filter(agenda -> agenda.getDeletedAt() == null) // Apenas agendamentos ativos
+                .map(agenda -> agenda.getHorario().getId())
+                .collect(Collectors.toSet());
+
+        return horarioRepository.findByDeletedAtIsNull().stream() // Pega todos os horários ativos do sistema
+                .filter(horario -> horariosDoBarbeiroIds.contains(horario.getId())) // Filtra pelos horários que o barbeiro oferece
+                .filter(horario -> !horariosAgendadosParaBarbeiroIds.contains(horario.getId())) // Filtra pelos que não estão agendados
+                .map(HorarioAdapter::fromEntityToRegistroHorario)
+                .collect(Collectors.toList());
+
     }
 }

@@ -51,4 +51,14 @@ public class CaixaController {
     public ResponseEntity<List<ServicosVendidos>> buscarServicoesMaisVendidos(){
         return ResponseEntity.ok(this.caixaService.buscarServicoesMaisVendidos());
     }
+
+    @GetMapping("/ticket-medio") // Novo endpoint
+    public ResponseEntity<BigDecimal> getTicketMedio() {
+        try {
+            BigDecimal ticketMedio = this.caixaService.calcularTicketMedio();
+            return ResponseEntity.ok(ticketMedio);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }

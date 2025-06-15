@@ -1,5 +1,7 @@
 package agendamento.servico.adapter;
 
+import agendamento.servico.dto.CadastroCliente;
+import agendamento.servico.dto.RegistroUsuario;
 import agendamento.servico.dto.agenda.CadastroAgenda;
 import agendamento.servico.entity.Usuario;
 
@@ -14,6 +16,23 @@ public class UsuarioAdapter {
                 null,
                 Instant.now(),
                 Instant.now()
+        );
+    }
+    public static Usuario fromCadastroClienteToEntity(CadastroCliente dados) {
+        return new Usuario(
+                null,
+                dados.nome(),
+                dados.contato(),
+                null,
+                Instant.now(),
+                Instant.now()
+        );
+    }
+    public static RegistroUsuario fromEntityToRegistroUsuario(Usuario usuario) {
+        return new RegistroUsuario(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getContato()
         );
     }
 }

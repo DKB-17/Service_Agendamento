@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -30,7 +32,6 @@ public class AgendaServiceImpl implements AgendaService {
     private final HorarioRepository horarioRepository;
     private final ServicoRepository servicoRepository;
     private final CaixaRepository caixaRepository;
-    private final HorarioInvalidoRepository horarioInvalidoRepository;
 
     @Autowired
     public AgendaServiceImpl(
@@ -39,14 +40,13 @@ public class AgendaServiceImpl implements AgendaService {
             BarbeiroRepository barbeiroRepository,
             HorarioRepository horarioRepository,
             ServicoRepository servicoRepository,
-            CaixaRepository caixaRepository, HorarioInvalidoRepository horarioInvalidoRepository){
+            CaixaRepository caixaRepository){
         this.agendaRepository = agendaRepository;
         this.usuarioRepository = usuarioRepository;
         this.barbeiroRepository = barbeiroRepository;
         this.horarioRepository = horarioRepository;
         this.servicoRepository = servicoRepository;
         this.caixaRepository = caixaRepository;
-        this.horarioInvalidoRepository = horarioInvalidoRepository;
     }
 
     @Override
@@ -58,20 +58,21 @@ public class AgendaServiceImpl implements AgendaService {
         Barbeiro barbeiro = this.buscarBarbeiro(dados.barbeiroId());
         Horario horario = this.buscarHorario(dados.horarioId());
         Servico servico = this.buscarServico(dados.servicoId());
-        List<HorarioInvalido> hrInvalidos = this.horarioInvalidoRepository.findAll();
 
-        boolean horarioDisponivel = hrInvalidos.stream().anyMatch(h -> Objects.equals(h.getHorario().getId(), horario.getId()));
-            
         boolean horarioValido = barbeiro.getHorarioBarbeiro().stream()
                 .anyMatch(hb -> Objects.equals(hb.getHorario().getId(), horario.getId()));
 
         boolean servicoValido = barbeiro.getServicoBarbeiro().stream()
                 .anyMatch(servicoBarbeiro -> Objects.equals(servicoBarbeiro.getServico().getId(), servico.getId()));
 
-        this.validarHorarioEServico(horarioValido, servicoValido,horarioDisponivel);
-
         Caixa caixa = this.caixaRepository.findByDia(dados.dia())
                 .orElse(this.caixaRepository.save(CaixaAdapter.fromCadastroAgendaToEntity(dados)));
+
+        boolean horarioJaAgendadoParaBarbeiroNoDia = agendaRepository.findAllByDia(dados.dia()).stream()
+                .filter(a -> a.getBarbeiro().getId().equals(barbeiro.getId()))
+                .anyMatch(a -> a.getHorario().getId().equals(horario.getId()) && a.getDeletedAt() == null);
+
+        this.validarHorarioEServico(horarioValido, servicoValido,horarioJaAgendadoParaBarbeiroNoDia);
 
         Agenda agenda = new Agenda(
                 null,
@@ -88,11 +89,6 @@ public class AgendaServiceImpl implements AgendaService {
                 Instant.now()
         );
 
-        HorarioInvalido horarioInvalido = new HorarioInvalido(
-                null,
-                horario
-        );
-        this.horarioInvalidoRepository.save(horarioInvalido);
 
         return AgendaAdapter.fromEntityToRegistroAgenda(this.agendaRepository.save(agenda));
     }
@@ -159,7 +155,7 @@ public class AgendaServiceImpl implements AgendaService {
         if (!horario) {
             throw new RuntimeException("Horario nao disponivel para esse barbeiro");
         }
-        if (!horarioDisponivel) {
+        if (horarioDisponivel) {
             throw new RuntimeException("Horario nao disponivel para esse dia");
         }
     }
@@ -208,4 +204,18 @@ public class AgendaServiceImpl implements AgendaService {
         }
         return cx;
     }
+
+    @Override
+    public List<RegistroAgenda> buscarProximosAgendamentosHoje() {
+        LocalDate hoje = LocalDate.now();
+        LocalTime agora = LocalTime.now();
+
+        List<Agenda> agendamentosHoje = agendaRepository.findAllByDia(hoje);
+
+        return agendamentosHoje.stream()
+                .filter(agenda -> agenda.getDeletedAt() == null && agenda.getHorario().getHorarioInicio().isAfter(agora))
+                .map(AgendaAdapter::fromEntityToRegistroAgenda)
+                .collect(Collectors.toList());
+    }
+
 }

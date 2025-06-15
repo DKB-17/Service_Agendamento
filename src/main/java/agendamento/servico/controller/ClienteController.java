@@ -1,11 +1,15 @@
 package agendamento.servico.controller;
 
+import agendamento.servico.dto.CadastroCliente;
+import agendamento.servico.dto.RegistroCliente;
+import agendamento.servico.entity.Cliente;
 import agendamento.servico.service.ClienteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/cliente")
@@ -19,6 +23,14 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-
+    @PostMapping()
+    public ResponseEntity<RegistroCliente> cadastrarCliente(@RequestBody @Valid CadastroCliente cliente) {
+        try {
+            RegistroCliente registroCliente = this.clienteService.cadastrarCliente(cliente);
+            return ResponseEntity.status(HttpStatus.OK).body(registroCliente);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 
 }

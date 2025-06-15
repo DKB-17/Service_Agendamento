@@ -5,6 +5,7 @@ import agendamento.servico.dto.CadastroHorario;
 import agendamento.servico.dto.FiltroHorario;
 import agendamento.servico.dto.RegistroHorario;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface HorarioService {
@@ -16,4 +17,6 @@ public interface HorarioService {
      void desativarHorario(Long id);
      RegistroHorario ativarHorario(Long id);
      List<RegistroHorario> buscarHorariosPorFiltro(FiltroHorario filtro);
+     List<RegistroHorario> listarHorariosDisponiveisNoDia (LocalDate dia, Long id);
+
 }

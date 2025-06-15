@@ -1,18 +1,17 @@
 package agendamento.servico.controller;
 
-import agendamento.servico.dto.AtualizarHorario;
-import agendamento.servico.dto.CadastroHorario;
-import agendamento.servico.dto.FiltroHorario;
-import agendamento.servico.dto.RegistroHorario;
+import agendamento.servico.dto.*;
 import agendamento.servico.service.HorarioService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -58,6 +57,16 @@ public class HorarioController {
         return ResponseEntity.ok(listaHorarios);
     }
 
+    @GetMapping("/disponiveis/{data}/{idbarbeiro}")
+    public ResponseEntity<List<RegistroHorario>> listarDisponiveisNoDia(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data, @PathVariable Long idbarbeiro){
+        try {
+            List<RegistroHorario> listaHorariosDisponiveis = this.horarioService.listarHorariosDisponiveisNoDia(data, idbarbeiro);
+            return ResponseEntity.ok(listaHorariosDisponiveis);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<RegistroHorario> buscarHorario(@PathVariable Long id){
         try {
@@ -100,5 +109,6 @@ public class HorarioController {
             throw new RuntimeException(e.getMessage());
         }
     }
+
 
 }

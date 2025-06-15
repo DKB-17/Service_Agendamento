@@ -17,4 +17,5 @@ public interface BarbeiroService {
    RegistroBarbeiro ativarBarbeiro(Long id);
    byte[] buscarImagemDoBarbeiro(Long idBarbeiro);
    void atribuirImagemBarbeiro(MultipartFile file, Long idBarbeiro);
+
 }

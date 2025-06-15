@@ -7,12 +7,6 @@ CREATE TABLE horarios (
                             created_at timestamp
 );
 
-CREATE TABLE horarios_invalidos(
-        id SERIAL PRIMARY KEY,
-        horario_id integer,
-        FOREIGN KEY (horario_id) REFERENCES horarios(id)
-);
-
 
 CREATE TABLE imagens (
                             id SERIAL PRIMARY KEY ,

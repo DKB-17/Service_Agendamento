@@ -14,4 +14,5 @@ public interface AgendaService {
     RegistroAgenda alterarAgenda(Long id, AtualizarAgenda agenda);
     List<RegistroAgenda> buscarAgendaPorFiltro(FiltroAgenda agenda);
     void desativarAgenda(Long id);
+    List<RegistroAgenda> buscarProximosAgendamentosHoje();
 }

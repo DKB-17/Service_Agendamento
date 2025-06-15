@@ -10,7 +10,9 @@ import agendamento.servico.repository.ServicoRepository;
 import agendamento.servico.service.ServicoService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
@@ -94,4 +96,5 @@ public class ServicoServiceImpl implements ServicoService {
         }
         return ServicoAdapter.converter(this.servicoRepository.findAll());
     }
+
 }

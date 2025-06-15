@@ -1,6 +1,7 @@
 package agendamento.servico.repository;
 
 import agendamento.servico.entity.Agenda;
+import agendamento.servico.entity.Barbeiro;
 import agendamento.servico.entity.enums.Etapa;
 import org.springframework.data.jpa.repository.JpaRepository;
 

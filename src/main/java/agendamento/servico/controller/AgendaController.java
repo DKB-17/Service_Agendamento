@@ -86,4 +86,15 @@ public class AgendaController {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    @GetMapping("/proximos-agendamentos-hoje")
+    public ResponseEntity<List<RegistroAgenda>> buscarProximosAgendamentosHoje() {
+        try {
+            List<RegistroAgenda> proximosAgendamentos = this.agendaService.buscarProximosAgendamentosHoje();
+            return ResponseEntity.status(HttpStatus.OK).body(proximosAgendamentos);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
 }
