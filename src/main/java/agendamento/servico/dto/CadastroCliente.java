@@ -16,12 +16,12 @@ public record CadastroCliente(
 
         @NotBlank
                 @CPF
-        String CPF,
+        String cpf,
         @NotBlank
                 @Email
         String email,
         @NotBlank
-                @Size(min = 12)
-        String password
+                @Size(min = 6)
+        String senha
 ) {
 }

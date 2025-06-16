@@ -196,7 +196,6 @@ public class BarbeiroServiceImpl implements BarbeiroService {
         this.barbeiroRepository.saveAndFlush(barbeiroSelecionado);
     }
 
-
     private Barbeiro buscarBarbeiroPorId(Long id){
         return this.barbeiroRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Registro de barbeiro nao existe"));

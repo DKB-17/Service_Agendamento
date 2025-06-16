@@ -131,13 +131,13 @@ CREATE TABLE agendas (
  );
 
  CREATE TABLE curtidas (
+     id SERIAL PRIMARY KEY,
      cliente_id    integer,
      FOREIGN KEY (cliente_id) REFERENCES clientes(id),
      post_id       integer,
      FOREIGN KEY (post_id) REFERENCES posts(id),
      comentario_id integer,
      FOREIGN KEY (comentario_id) REFERENCES comentarios(id),
-     CONSTRAINT pk PRIMARY KEY (cliente_id, post_id, comentario_id),
      created_at    timestamp
  );
 

@@ -38,9 +38,9 @@ public class ClienteServiceImpl implements ClienteService {
                 null,
                 null,
                 usuario,
-                dados.CPF(),
+                dados.cpf(),
                 dados.email(),
-                dados.password(),
+                dados.senha(),
                 null,
                 Instant.now(),
                 Instant.now()
