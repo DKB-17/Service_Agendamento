@@ -1,16 +1,15 @@
 package agendamento.servico.service.impl;
 
+import agendamento.servico.adapter.ComentarioAdapter;
 import agendamento.servico.adapter.CurtidaAdapter;
 import agendamento.servico.adapter.PostAdapter;
-import agendamento.servico.dto.CadastroPost;
-import agendamento.servico.dto.CurtirPost;
-import agendamento.servico.dto.RegistroCurtida;
-import agendamento.servico.dto.RegistroPost;
+import agendamento.servico.dto.*;
 import agendamento.servico.entity.Agenda;
 import agendamento.servico.entity.Cliente;
 import agendamento.servico.entity.Curtida;
 import agendamento.servico.entity.Post;
 import agendamento.servico.repository.ClienteRepository;
+import agendamento.servico.repository.ComentarioRepository;
 import agendamento.servico.repository.CurtidaRepository;
 import agendamento.servico.repository.PostRepository;
 import agendamento.servico.service.PostService;
@@ -28,13 +27,15 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final ClienteRepository clienteRepository;
     private final CurtidaRepository curtidaRepository;
+    private final ComentarioRepository comentarioRepository;
 
 
-    public PostServiceImpl(PostRepository postRepository, ClienteRepository clienteRepository, CurtidaRepository curtidaRepository) {
+    public PostServiceImpl(PostRepository postRepository, ClienteRepository clienteRepository, CurtidaRepository curtidaRepository, ComentarioRepository comentarioRepository, ComentarioRepository comentarioRepository1) {
 
         this.postRepository = postRepository;
         this.clienteRepository = clienteRepository;
         this.curtidaRepository = curtidaRepository;
+        this.comentarioRepository = comentarioRepository1;
     }
 
     @Override
@@ -94,11 +95,17 @@ public class PostServiceImpl implements PostService {
 
     }
 
+
     private Cliente buscaClientePorId(Long id) {
         return this.clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Registro de cliente nao existe"));
     }
 
     private Post buscaPostPorId(Long id) {
         return this.postRepository.findById(id).orElseThrow(() -> new RuntimeException("Registro de post nao existe"));
+    }
+
+    public List<RegistroComentario> buscarComentariosPost (Long id){
+        Post post = buscaPostPorId(id);
+        return this.comentarioRepository.findAllByPost(post).stream().map(ComentarioAdapter::fromEntityToRegistroComentario).toList();
     }
 }
